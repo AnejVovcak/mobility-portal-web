@@ -14,12 +14,13 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
 
             {/* Loop through the countries and use radio form */}
             <form>
-                {Object.entries(props.countries).map((country:[CountryCode,string]) => {
+                {Object.entries(props.countries).map((country: [CountryCode, string]) => {
                     const code = country[0];
                     const name = country[1];
                     return (
                         <div key={code}>
-                            <input type="radio" id={code} name="country" value={code} onClick={() => props.onSelect(code)} />
+                            <input type="radio" id={code + 'OUT'} name="country" value={code}
+                                   onClick={() => props.onSelect(code)}/>
                             <label htmlFor={code}>{name}</label>
                         </div>
                     );

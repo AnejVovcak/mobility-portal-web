@@ -7,23 +7,17 @@ import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
 import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
 import WhereAreYouGoing from "@/app/ui/questions/WhereAreYouGoing";
 import HowLongAreYouStayingIn from "@/app/ui/questions/HowLongAreYouStayingIn";
+import {MigTime} from "@/app/lib/definitions/time";
+import WhatIsYourNationality from "@/app/ui/questions/WhatIsYourNationality";
 
 export default function WizardPage() {
 
-    const numOfQuestions = 3;
+    const numOfQuestions = 4;
     const [index, setIndex] = useState(0);
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
+    const [selectedTime, setSelectedTime] = useState<MigTime | undefined>(undefined);
 
-    //function for the next button
-    const handleNext = () => {
-        setIndex(index + 1);
-    };
-
-    //function for the back button
-    const handleBack = () => {
-        setIndex(index - 1);
-    };
 
     const getInCounties = () => {
         //return the supported countries for the second question (remove the country selected in the first question)
@@ -44,18 +38,25 @@ export default function WizardPage() {
                                 onSelect: (country) => setSelectedOutCountry(country)
                             })
                         ) : i === 1 ? (
-                            WhereAreYouGoing({countries: getInCounties(), onSelect: (country) => setSelectedInCountry(country)})
-                        ) : HowLongAreYouStayingIn({
-                            country: selectedInCountry!,
-                            countryName: supportedCountries[selectedInCountry],
-                            onSelect: (time) => void (0)
-                        })
+                            WhereAreYouGoing({
+                                countries: getInCounties(),
+                                onSelect: (country) => setSelectedInCountry(country)
+                            })
+                        ) : i === 2 ? (
+                            HowLongAreYouStayingIn({
+                                country: selectedInCountry!,
+                                countryName: supportedCountries[selectedInCountry],
+                                onSelect: (time) => setSelectedTime(time)
+                            })
+                        ) : (
+                            WhatIsYourNationality({onNationalitySelect: (nationality: any) => console.log(nationality)})
+                        )
                     }
                     visible={index === i}
                     isFirst={i === 0}
                     isLast={i === numOfQuestions - 1}
-                    onNext={handleNext}
-                    onBack={handleBack}
+                    onNext={() => setIndex(index + 1)}
+                    onBack={() => setIndex(index - 1)}
                 />
             ))}
         </div>
