@@ -1,7 +1,10 @@
 'use client';
 
+import {CountryCode} from "@/app/lib/definitions/countries";
+
 interface WhereAreYouFromProps {
-	countries: { [code: string]: string }[];
+	countries: { [key in CountryCode]: string };
+	onSelect: (country: CountryCode) => void;
 }
 
 export default function WhereAreYouFrom(props: WhereAreYouFromProps) {
@@ -11,12 +14,12 @@ export default function WhereAreYouFrom(props: WhereAreYouFromProps) {
 
 			{/* Loop through the countries and use radio form */}
 			<form>
-				{props.countries.map((country) => {
-					const code = Object.keys(country)[0];
-					const name = country[code];
+				{Object.entries(props.countries).map((country:[CountryCode,string]) => {
+					const code = country[0];
+					const name = country[1];
 					return (
 						<div key={code}>
-							<input type="radio" id={code} name="country" value={code} />
+							<input type="radio" id={code} name="country" value={code} onClick={() => props.onSelect(code)} />
 							<label htmlFor={code}>{name}</label>
 						</div>
 					);

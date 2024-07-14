@@ -1,75 +1,63 @@
 'use client';
 
 import React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import CustomCard from '../ui/CustomCard';
 import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
-import { suportedCountries } from '../lib/countries';
+import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
+import WhereAreYouGoing from "@/app/ui/questions/WhereAreYouGoing";
+import HowLongAreYouStayingIn from "@/app/ui/questions/HowLongAreYouStayingIn";
 
 export default function WizardPage() {
-	const questions = [
-		{
-			question: "Where are you from?",
-			options: ['Red', 'Green', 'Blue'],
-		},
-		{
-			question: "Where are you going?",
-			options: ['Dog', 'Cat', 'Bird'],
-		},
-		{
-			question: "How long are you going to stay in ... ?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		},
-		{
-			question: "What's your nationality as shown on your passport or travel document?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		},
-		{
-			question: "Where are you currently employed?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		},
-		{
-			question: "Where are you going to be employed?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		},
-		{
-			question: "Where are you currently ensured?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		},
-		{
-			question: "What is your tax residence?",
-			options: ['Pizza', 'Pasta', 'Burger'],
-		}
-	];
-	
-	//index of the question
-	// Use useState to manage the index of the question
-	const [index, setIndex] = useState(0);
 
-	//function for the next button
-	const handleNext = () => {
-		setIndex(index + 1);
-	};
+    const numOfQuestions = 3;
+    const [index, setIndex] = useState(0);
+    const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
+    const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
 
-	//function for the back button
-	const handleBack = () => {
-		setIndex(index - 1);
-	};
+    //function for the next button
+    const handleNext = () => {
+        setIndex(index + 1);
+    };
 
-	return (
-		//foor loop trough the questions
-		<div>
-			{questions.map((question, i) => (
-				<CustomCard
-					key={i}
-					childComponent={WhereAreYouFrom( {countries: suportedCountries} )}
-					visible={index === i}
-					isFirst={i === 0}
-					isLast={i === questions.length - 1}
-					onNext={handleNext}
-					onBack={handleBack}
-				/>
-			))}
-		</div>
-	);
+    //function for the back button
+    const handleBack = () => {
+        setIndex(index - 1);
+    };
+
+    const getInCounties = () => {
+        //return the supported countries for the second question (remove the country selected in the first question)
+        let countries = {...supportedCountries};
+        delete countries[selectedOutCountry];
+        return countries;
+    }
+
+    return (
+        <div>
+            {Array.from({length: numOfQuestions}, (_, i) => (
+                <CustomCard
+                    key={i}
+                    childComponent={
+                        i === 0 ? (
+                            WhereAreYouFrom({
+                                countries: supportedCountries,
+                                onSelect: (country) => setSelectedOutCountry(country)
+                            })
+                        ) : i === 1 ? (
+                            WhereAreYouGoing({countries: getInCounties(), onSelect: (country) => setSelectedInCountry(country)})
+                        ) : HowLongAreYouStayingIn({
+                            country: selectedInCountry!,
+                            countryName: supportedCountries[selectedInCountry],
+                            onSelect: (time) => void (0)
+                        })
+                    }
+                    visible={index === i}
+                    isFirst={i === 0}
+                    isLast={i === numOfQuestions - 1}
+                    onNext={handleNext}
+                    onBack={handleBack}
+                />
+            ))}
+        </div>
+    );
 }
