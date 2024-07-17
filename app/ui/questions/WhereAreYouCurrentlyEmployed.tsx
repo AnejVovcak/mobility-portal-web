@@ -1,14 +1,14 @@
 import {CountryCode} from "@/app/lib/definitions/countries";
 
-interface WhereAreYouEmployedNowProps {
+interface WhereAreYouCurrentlyEmployedProps {
     countries: { [key in CountryCode]: string };
-    onSelect: (country: CountryCode) => void;
+    onSelect: (country?: CountryCode) => void;
 }
 
-export default function WhereAreYouEmployedNow(props: WhereAreYouEmployedNowProps) {
+export default function WhereAreYouCurrentlyEmployed(props: WhereAreYouCurrentlyEmployedProps) {
     return (
         <div>
-            <h2>Where are you employed?</h2>
+            <h2>Where are you currently employed?</h2>
 
             {/* Loop through the countries and use radio form */}
             <form>
@@ -23,6 +23,11 @@ export default function WhereAreYouEmployedNow(props: WhereAreYouEmployedNowProp
                         </div>
                     );
                 })}
+                <div>
+                    <input type="radio" id={'not' + 'EMPLNOW'} name="country" value={'not'}
+                           onClick={() => props.onSelect(undefined)}/>
+                    <label htmlFor={'not'}>I am not employed</label>
+                </div>
             </form>
 
         </div>
