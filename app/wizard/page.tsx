@@ -10,6 +10,9 @@ import HowLongAreYouStayingIn from "@/app/ui/questions/HowLongAreYouStayingIn";
 import {MigTime} from "@/app/lib/definitions/time";
 import WhatIsYourNationality from "@/app/ui/questions/WhatIsYourNationality";
 import WhereAreYouEmployedNow from "@/app/ui/questions/WhereAreYouEmployedNow";
+import WhereAreYouGoingToBeEmployed from "@/app/ui/questions/WhereAreYouGoingToBeEmployed";
+import WhereAreYouInsured from "@/app/ui/questions/WhereAreYouInsured";
+import WhatIsYourTaxResidence from "@/app/ui/questions/WhatIsYourTaxResidence";
 
 export default function WizardPage() {
 
@@ -49,8 +52,33 @@ export default function WizardPage() {
                                 countryName: supportedCountries[selectedInCountry],
                                 onSelect: (time) => setSelectedTime(time)
                             })
+                        ) : i === 3 ? (
+                            WhatIsYourNationality({
+                                onNationalitySelect: (nationality: any) => console.log(nationality),
+                                countryName: supportedCountries[selectedInCountry],
+                                inCountry: selectedInCountry!,
+                                outCountry: selectedOutCountry!
+                            })
+                        ) : i === 4 ? (
+                            WhereAreYouEmployedNow({
+                                countries: supportedCountries,
+                                onSelect: (country) => console.log(country)
+                            })
+                        ) : i === 5 ? (
+                            WhereAreYouGoingToBeEmployed({
+                                countries: supportedCountries,
+                                onSelect: (country) => console.log(country)
+                            })
+                        ) : i === 6 ? (
+                            WhereAreYouInsured({
+                                countries: supportedCountries,
+                                onSelect: (country) => console.log(country)
+                            })
                         ) : (
-                            WhatIsYourNationality({onNationalitySelect: (nationality: any) => console.log(nationality)})
+                            WhatIsYourTaxResidence({
+                                countries: supportedCountries,
+                                onSelect: (country) => console.log(country)
+                            })
                         )
                     }
                     visible={index === i}

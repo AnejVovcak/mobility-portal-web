@@ -6,6 +6,7 @@ export enum CountryCode {
 	ITA = 'ITA',
 	UK = 'UK',
 	BEL = 'BEL',
+	OTHER = 'OTHER',
 }
 export const supportedCountries: { [key in CountryCode]: string } = {
 	[CountryCode.POR]: 'Portugal',
@@ -14,4 +15,5 @@ export const supportedCountries: { [key in CountryCode]: string } = {
 	[CountryCode.ITA]: 'Italy',
 	[CountryCode.UK]: 'United Kingdom',
 	[CountryCode.BEL]: 'Belgium',
+	[CountryCode.OTHER]: 'Other',
 };
