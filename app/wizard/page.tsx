@@ -9,10 +9,11 @@ import WhereAreYouGoing from "@/app/ui/questions/WhereAreYouGoing";
 import HowLongAreYouStayingIn from "@/app/ui/questions/HowLongAreYouStayingIn";
 import {MigTime} from "@/app/lib/definitions/time";
 import WhatIsYourNationality from "@/app/ui/questions/WhatIsYourNationality";
+import WhereAreYouEmployedNow from "@/app/ui/questions/WhereAreYouEmployedNow";
 
 export default function WizardPage() {
 
-    const numOfQuestions = 4;
+    const numOfQuestions = 7;
     const [index, setIndex] = useState(0);
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
