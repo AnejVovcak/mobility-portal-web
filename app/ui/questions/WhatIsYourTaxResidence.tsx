@@ -1,8 +1,9 @@
 import {CountryCode} from "@/app/lib/definitions/countries";
+import {Tax} from "@/app/lib/definitions/tax";
 
 interface WhatIsYourTaxResidenceProps {
-    countries: { [key in CountryCode]: string };
-    onSelect: (country: CountryCode) => void;
+    countries: { [code: CountryCode]: string };
+    onSelect: (country?: Tax) => void;
 }
 
 export default function WhatIsYourTaxResidence(props: WhatIsYourTaxResidenceProps) {
@@ -18,7 +19,7 @@ export default function WhatIsYourTaxResidence(props: WhatIsYourTaxResidenceProp
                     return (
                         <div key={code}>
                             <input type="radio" id={code + 'EMPLNOW'} name="country" value={code}
-                                   onClick={() => props.onSelect(code)}/>
+                                   onClick={() => props.onSelect(undefined)}/>
                             <label htmlFor={code}>{name}</label>
                         </div>
                     );

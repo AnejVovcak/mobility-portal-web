@@ -13,6 +13,8 @@ import WhereAreYouGoingToBeEmployed from "@/app/ui/questions/WhereAreYouGoingToB
 import WhereAreYouInsured from "@/app/ui/questions/WhereAreYouInsured";
 import WhatIsYourTaxResidence from "@/app/ui/questions/WhatIsYourTaxResidence";
 import {Empl} from "@/app/lib/definitions/empl";
+import {Empl0EQEmpl1Enum} from "@/app/lib/definitions/Empl0EQEmpl1Enum";
+import {Tax} from "@/app/lib/definitions/tax";
 
 export default function WizardPage() {
 
@@ -21,15 +23,32 @@ export default function WizardPage() {
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<MigTime | undefined>(undefined);
+    const [currentlyEmployed, setCurrentlyEmployed] = useState<CountryCode | undefined>(undefined);
     const [empl, setEmpl] = useState<Empl | undefined>(undefined); // TODO add ALL_IMPL
+    const [empl0EQEmpl1Enum, setEmpl0EQEmpl1Enum] = useState<Empl0EQEmpl1Enum | undefined>(undefined);
+    const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
+    const [taxResidence, setTaxResidence] = useState<Tax | undefined>(undefined);
     const [notSupported, setNotSupported] = useState<boolean | undefined>(undefined);
 
 
-    const getInCounties = () => {
+    const getInCountiesOptions = () => {
         //return the supported countries for the second question (remove the country selected in the first question)
         let countries = {...supportedCountries};
         delete countries[selectedOutCountry];
         return countries;
+    }
+
+    const getWhereAreYouGoingToBeEmployedOptions = () => {
+        let countries = {...supportedCountries};
+        delete countries[currentlyEmployed];
+        return countries;
+    }
+
+    const getTaxResidenceOptions = () => {
+        return {
+            [selectedOutCountry!]: supportedCountries[selectedOutCountry!],
+            [selectedInCountry!]: supportedCountries[selectedInCountry!]
+        }
     }
 
     return (
@@ -45,7 +64,7 @@ export default function WizardPage() {
                             })
                         ) : i === 1 ? (
                             WhereAreYouGoing({
-                                countries: getInCounties(),
+                                countries: getInCountiesOptions(),
                                 onSelect: (country) => setSelectedInCountry(country)
                             })
                         ) : i === 2 ? (
@@ -66,33 +85,44 @@ export default function WizardPage() {
                                 countries: supportedCountries,
                                 onSelect: (country) => {
                                     if (country === undefined ||
-                                        (country!==selectedOutCountry && country!==selectedInCountry)) {
+                                        (country !== selectedOutCountry && country !== selectedInCountry)) {
                                         setNotSupported(true);
                                         return;
                                     }
-                                    if (country == selectedOutCountry && country == selectedInCountry) {
-                                        setEmpl(Empl.EMPL0_EQ_EMPL1)
-                                        return;
-                                    } else if (country == selectedOutCountry || country == selectedInCountry) {
-                                        setEmpl(Empl.EMPL0_NEQ_EMPL1)
-                                        return;
-                                    }
+                                    setCurrentlyEmployed(country)
                                 }
                             })
                         ) : i === 5 ? (
                             WhereAreYouGoingToBeEmployed({
-                                countries: supportedCountries,
-                                onSelect: (country) => console.log(country)
+                                countries: getWhereAreYouGoingToBeEmployedOptions(),
+                                outCountry: selectedOutCountry!,
+                                currentlyEmployed: currentlyEmployed,
+                                onSelectEmpl: (country) => {
+                                    if (country === undefined ||
+                                        (country !== selectedOutCountry && country !== selectedInCountry)) {
+                                        setNotSupported(true);
+                                        return;
+                                    }
+                                    if (country === selectedOutCountry && country === currentlyEmployed) {
+                                        setEmpl(Empl.EMPL0_EQ_EMPL1);
+                                    }
+                                    if (country === selectedInCountry && currentlyEmployed === selectedOutCountry) {
+                                        setEmpl(Empl.EMPL0_NEQ_EMPL1);
+                                    }
+                                    setNotSupported(false);
+                                },
+                                onSelectEmplLogic:
+                                    (empl0EQEmpl1Enum) => setEmpl0EQEmpl1Enum(empl0EQEmpl1Enum)
                             })
                         ) : i === 6 ? (
                             WhereAreYouInsured({
                                 countries: supportedCountries,
-                                onSelect: (country) => console.log(country)
+                                onSelect: (country) => setInsured(country)
                             })
                         ) : (
                             WhatIsYourTaxResidence({
-                                countries: supportedCountries,
-                                onSelect: (country) => console.log(country)
+                                countries: getTaxResidenceOptions(),
+                                onSelect: (country) => setTaxResidence(country)
                             })
                         )
                     }
