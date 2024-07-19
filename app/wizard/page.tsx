@@ -18,7 +18,7 @@ import {Tax} from "@/app/lib/definitions/tax";
 
 export default function WizardPage() {
 
-    const numOfQuestions = 7;
+    const numOfQuestions = 8;
     const [index, setIndex] = useState(0);
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
@@ -27,7 +27,7 @@ export default function WizardPage() {
     const [empl, setEmpl] = useState<Empl | undefined>(undefined); // TODO add ALL_IMPL
     const [empl0EQEmpl1Enum, setEmpl0EQEmpl1Enum] = useState<Empl0EQEmpl1Enum | undefined>(undefined);
     const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
-    const [taxResidence, setTaxResidence] = useState<Tax | undefined>(undefined);
+    const [taxResidencyArr, setTaxResidenceArr] = useState<Tax[] | undefined>(undefined);
     const [notSupported, setNotSupported] = useState<boolean | undefined>(undefined);
 
 
@@ -121,8 +121,10 @@ export default function WizardPage() {
                             })
                         ) : (
                             WhatIsYourTaxResidence({
+                                inCountry: selectedInCountry!,
+                                outCountry: selectedOutCountry!,
                                 countries: getTaxResidenceOptions(),
-                                onSelect: (country) => setTaxResidence(country)
+                                onSelect: (taxResidencyArr?: Tax[]) => setTaxResidenceArr(taxResidencyArr)
                             })
                         )
                     }
