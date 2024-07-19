@@ -30,19 +30,12 @@ export default function WizardPage() {
     const [empl0EQEmpl1Enum, setEmpl0EQEmpl1Enum] = useState<Empl0EQEmpl1Enum | undefined>(undefined);
     const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
     const [taxResidencyArr, setTaxResidenceArr] = useState<Tax[] | undefined>(undefined);
-    const [notSupported, setNotSupported] = useState<boolean | undefined>(undefined);
 
 
     const getInCountiesOptions = () => {
         //return the supported countries for the second question (remove the country selected in the first question)
         let countries = {...supportedCountries};
         delete countries[selectedOutCountry];
-        return countries;
-    }
-
-    const getWhereAreYouGoingToBeEmployedOptions = () => {
-        let countries = {...supportedCountries};
-        delete countries[currentlyEmployed];
         return countries;
     }
 
@@ -85,39 +78,23 @@ export default function WizardPage() {
                             })
                         ) : i === 4 ? (
                             WhereAreYouCurrentlyEmployed({
+                                outCountry: selectedOutCountry!,
+                                inCountry: selectedInCountry!,
                                 countries: supportedCountries,
                                 onSelect: (country) => {
-                                    if (country === undefined ||
-                                        country === CountryCode.OTHER ||
-                                        (country !== selectedOutCountry && country !== selectedInCountry)) {
-                                        setNotSupported(true);
-                                        return;
-                                    }
                                     setCurrentlyEmployed(country)
                                 }
                             })
                         ) : i === 5 ? (
                             WhereAreYouGoingToBeEmployed({
-                                countries: getWhereAreYouGoingToBeEmployedOptions(),
+                                countries: supportedCountries,
                                 outCountry: selectedOutCountry!,
+                                inCountry: selectedInCountry!,
                                 currentlyEmployed: currentlyEmployed,
-                                onSelectEmpl: (country) => {
-                                    if (country === undefined ||
-                                        country === CountryCode.OTHER ||
-                                        (country !== selectedOutCountry && country !== selectedInCountry)) {
-                                        setNotSupported(true);
-                                        return;
-                                    }
-                                    if (country === selectedOutCountry && country === currentlyEmployed) {
-                                        setEmpl(Empl.EMPL0_EQ_EMPL1);
-                                    }
-                                    if (country === selectedInCountry && currentlyEmployed === selectedOutCountry) {
-                                        setEmpl(Empl.EMPL0_NEQ_EMPL1);
-                                    }
-                                    setNotSupported(false);
-                                },
-                                onSelectEmplLogic:
-                                    (empl0EQEmpl1Enum) => setEmpl0EQEmpl1Enum(empl0EQEmpl1Enum)
+                                onSelectEmpl:
+                                    (empl0EQEmpl1Enum) => setEmpl(empl0EQEmpl1Enum),
+                                onSelectTripType:
+                                    (empl) => setEmpl0EQEmpl1Enum(empl)
                             })
                         ) : i === 6 ? (
                             WhereAreYouInsured({

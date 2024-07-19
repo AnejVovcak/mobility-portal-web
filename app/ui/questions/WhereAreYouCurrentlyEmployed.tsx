@@ -1,11 +1,21 @@
 import {CountryCode} from "@/app/lib/definitions/countries";
 
 interface WhereAreYouCurrentlyEmployedProps {
+    outCountry: CountryCode;
+    inCountry: CountryCode;
     countries: { [key in CountryCode]: string };
     onSelect: (country?: CountryCode) => void;
 }
 
 export default function WhereAreYouCurrentlyEmployed(props: WhereAreYouCurrentlyEmployedProps) {
+    const handleSelect = (country: CountryCode) => {
+        if (country === CountryCode.OTHER || (country !== props.outCountry && country !== props.inCountry)) {
+            props.onSelect(undefined);
+        } else {
+            props.onSelect(country);
+        }
+    }
+
     return (
         <div>
             <h2>Where are you currently employed?</h2>
@@ -18,7 +28,7 @@ export default function WhereAreYouCurrentlyEmployed(props: WhereAreYouCurrently
                     return (
                         <div key={code}>
                             <input type="radio" id={code + 'EMPLNOW'} name="country" value={code}
-                                   onClick={() => props.onSelect(code)}/>
+                                   onClick={() => handleSelect(code)}/>
                             <label htmlFor={code}>{name}</label>
                         </div>
                     );

@@ -1,21 +1,32 @@
 import {CountryCode} from "@/app/lib/definitions/countries";
 import {useState} from "react";
 import {Empl0EQEmpl1Enum} from "@/app/lib/definitions/Empl0EQEmpl1Enum";
+import { Empl } from "@/app/lib/definitions/empl";
 
 interface WhereAreYouGoingToBeEmployedProps {
     outCountry: CountryCode;
+    inCountry: CountryCode;
     currentlyEmployed: CountryCode | undefined;
     countries: { [key in CountryCode]: string };
-    onSelectEmpl: (country?: CountryCode) => void;
-    onSelectEmplLogic: (empl0EQEmpl1Enum?: Empl0EQEmpl1Enum) => void;
+    onSelectEmpl: (empl?: Empl) => void;
+    onSelectTripType: (tripType?: Empl0EQEmpl1Enum) => void;
 }
 
 export default function WhereAreYouGoingToBeEmployed(props: WhereAreYouGoingToBeEmployedProps) {
     const [goingToBeEmployed, setGoingToBeEmployed] = useState<CountryCode | undefined>(undefined);
 
     const handleSelect = (country: CountryCode) => {
+        if (props.currentlyEmployed === props.outCountry && country === props.currentlyEmployed) {
+            props.onSelectEmpl(Empl.EMPL0_EQ_EMPL1);
+        }
+        else if (props.currentlyEmployed === props.outCountry && country === props.inCountry) {
+            props.onSelectEmpl(Empl.EMPL0_EQ_EMPL1);
+        }
+        else {
+            props.onSelectEmpl(undefined);
+        }
+
         setGoingToBeEmployed(country);
-        props.onSelectEmpl(country);
     }
 
     return (
@@ -47,13 +58,13 @@ export default function WhereAreYouGoingToBeEmployed(props: WhereAreYouGoingToBe
                     <div>
                         <h2> I am going to be ...</h2>
                         <div>
-                            <input type="radio" id={'same' + 'EMPLFUTURE'} value={'same'}
-                                   onClick={() => props.onSelectEmplLogic(Empl0EQEmpl1Enum.BUSINESS_TRIP)}/>
+                            <input type="radio" id={'same' + 'EMPLFUTURE'} name="travel"
+                                   onClick={() => props.onSelectTripType(Empl0EQEmpl1Enum.BUSINESS_TRIP)}/>
                             <label htmlFor={'same'}>sent on a business trip</label>
                         </div>
                         <div>
-                            <input type="radio" id={'diff' + 'EMPLFUTURE'} name="country" value={'diff'}
-                                   onClick={() => props.onSelectEmplLogic(Empl0EQEmpl1Enum.POSTED_WORKER)}/>
+                            <input type="radio" id={'diff' + 'EMPLFUTURE'} name="travel"
+                                   onClick={() => props.onSelectTripType(Empl0EQEmpl1Enum.POSTED_WORKER)}/>
                             <label htmlFor={'diff'}>posted abroad</label>
                         </div>
                     </div>
