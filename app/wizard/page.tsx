@@ -15,6 +15,7 @@ import WhatIsYourTaxResidence from "@/app/ui/questions/WhatIsYourTaxResidence";
 import {Empl} from "@/app/lib/definitions/empl";
 import {Empl0EQEmpl1Enum} from "@/app/lib/definitions/Empl0EQEmpl1Enum";
 import {Tax} from "@/app/lib/definitions/tax";
+import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
 
 export default function WizardPage() {
 
@@ -22,6 +23,7 @@ export default function WizardPage() {
     const [index, setIndex] = useState(0);
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
+    const [secondment, setSecondment] = useState<SecondmentEnum | undefined>(undefined);
     const [selectedTime, setSelectedTime] = useState<MigTime | undefined>(undefined);
     const [currentlyEmployed, setCurrentlyEmployed] = useState<CountryCode | undefined>(undefined);
     const [empl, setEmpl] = useState<Empl | undefined>(undefined); // TODO add ALL_IMPL
@@ -65,7 +67,8 @@ export default function WizardPage() {
                         ) : i === 1 ? (
                             WhereAreYouGoing({
                                 countries: getInCountiesOptions(),
-                                onSelect: (country) => setSelectedInCountry(country)
+                                onSelect: (country) => setSelectedInCountry(country),
+                                onSelectSecondment: (secondment) => setSecondment(secondment)
                             })
                         ) : i === 2 ? (
                             HowLongAreYouStayingIn({
@@ -85,6 +88,7 @@ export default function WizardPage() {
                                 countries: supportedCountries,
                                 onSelect: (country) => {
                                     if (country === undefined ||
+                                        country === CountryCode.OTHER ||
                                         (country !== selectedOutCountry && country !== selectedInCountry)) {
                                         setNotSupported(true);
                                         return;
@@ -99,6 +103,7 @@ export default function WizardPage() {
                                 currentlyEmployed: currentlyEmployed,
                                 onSelectEmpl: (country) => {
                                     if (country === undefined ||
+                                        country === CountryCode.OTHER ||
                                         (country !== selectedOutCountry && country !== selectedInCountry)) {
                                         setNotSupported(true);
                                         return;

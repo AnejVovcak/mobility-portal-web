@@ -1,0 +1,5 @@
+export enum SecondmentEnum{
+    SECONDMENT = 'SECONDMENT',
+    NO_SECONDMENT = 'NO SECONDMENT',
+    ALL_SECONDMENT = 'ALL SECONDMENT'
+}
