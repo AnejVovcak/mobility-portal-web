@@ -21,13 +21,15 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
             return;
         }
 
+        props.onSelect(code);
+
         if(code == CountryCode.ROM){
             setRomania(true);
         }
 
         if(code == CountryCode.UK){
             setUk(true);
-        }
+        }      
     }
 
     const onSelectRom = (opt: string) => {
