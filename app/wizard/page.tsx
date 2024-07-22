@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import CustomCard from '../ui/CustomCard';
+import QuestionCard from '../ui/QuestionCard';
 import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
 import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
 import WhereAreYouGoing from "@/app/ui/questions/WhereAreYouGoing";
@@ -18,6 +18,8 @@ import {Tax} from "@/app/lib/definitions/tax";
 import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
 import { InTitleEnum } from '../lib/definitions/InTitleEnum';
 import { OutTitleEnum } from '../lib/definitions/OutTitleEnum';
+import { NatMig } from '../lib/definitions/nationality';
+import { getRoadmapData } from '../lib/roadmap';
 
 export default function WizardPage() {
 
@@ -25,7 +27,7 @@ export default function WizardPage() {
     const [index, setIndex] = useState(0);
     const [selectedOutCountry, setSelectedOutCountry] = useState<CountryCode | undefined>(undefined);
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
-    const [secondment, setSecondment] = useState<SecondmentEnum | undefined>(SecondmentEnum.NO_SECONDMENT);
+    const [secondment, setSecondment] = useState<SecondmentEnum>(SecondmentEnum.NO_SECONDMENT);
     const [selectedTime, setSelectedTime] = useState<MigTime | undefined>(undefined);
     const [inTitle, setInTitle] = useState<InTitleEnum | undefined>(undefined);
     const [outTitle, setOutTitle] = useState<OutTitleEnum | undefined>(undefined);
@@ -53,7 +55,7 @@ export default function WizardPage() {
     return (
         <div>
             {Array.from({length: numOfQuestions}, (_, i) => (
-                <CustomCard
+                <QuestionCard
                     key={i}
                     childComponent={
                         i === 0 ? (
@@ -126,6 +128,17 @@ export default function WizardPage() {
                     isLast={i === numOfQuestions - 1}
                     onNext={() => setIndex(index + 1)}
                     onBack={() => setIndex(index - 1)}
+                    //on submit print all the filters
+                    onSubmit={async () => {
+                        try {
+                            //const response = await fetch(`/api/roadmap?secondment=${secondment}&outCountry=${selectedOutCountry}&inCountry=${selectedInCountry}&outTitle=${outTitle}&inTitle=${inTitle}&time=${selectedTime}&nat=${NatMig}`);
+                            const response = await fetch('/api/roadmap');
+                            console.log(response);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                    }
                 />
             ))}
         </div>

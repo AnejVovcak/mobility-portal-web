@@ -1,14 +1,40 @@
 import clientPromise from "@/app/lib/mongodb";
 
-export async function GET(request) {
+export async function GET(
+    req: Request,
+    res: Response,
+){
+    //const { secondment, outCountry, inCountry, outTitle, inTitle, time, nat } = req.query;
+
     try {
         const client = await clientPromise;
-        const db = client.db('test');
+        const db = client.db('lawBrainerDevelopment');
 
-        const collection = db.collection('users');
-        const users = await collection.find({}).toArray();
+        const collection = db.collection('mig');
+        
+        /* const filter = {
+            $and: [
+                { secondment: secondment },
+                { outCountry: outCountry },
+                { inCountry: inCountry },
+                { outTitle: outTitle },
+                { inTitle: inTitle },
+                { time: time },
+                { nat: { $in: nat } }
+            ]
+        };
 
-        return new Response(JSON.stringify({ users }), {
+        const sort = {
+            title: 1,
+            date: 1
+        };
+
+        const data = await collection.find(filter).sort(sort).toArray(); */
+
+        //get all data
+        const data = await collection.find({}).toArray();
+
+        return new Response(JSON.stringify({ data }), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json'
