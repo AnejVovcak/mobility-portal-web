@@ -16,6 +16,8 @@ import {Empl} from "@/app/lib/definitions/empl";
 import {Empl0EQEmpl1Enum} from "@/app/lib/definitions/Empl0EQEmpl1Enum";
 import {Tax} from "@/app/lib/definitions/tax";
 import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
+import { InTitleEnum } from '../lib/definitions/InTitleEnum';
+import { OutTitleEnum } from '../lib/definitions/OutTitleEnum';
 
 export default function WizardPage() {
 
@@ -25,6 +27,8 @@ export default function WizardPage() {
     const [selectedInCountry, setSelectedInCountry] = useState<CountryCode | undefined>(undefined);
     const [secondment, setSecondment] = useState<SecondmentEnum | undefined>(SecondmentEnum.NO_SECONDMENT);
     const [selectedTime, setSelectedTime] = useState<MigTime | undefined>(undefined);
+    const [inTitle, setInTitle] = useState<InTitleEnum | undefined>(undefined);
+    const [outTitle, setOutTitle] = useState<OutTitleEnum | undefined>(undefined);
     const [currentlyEmployed, setCurrentlyEmployed] = useState<CountryCode | undefined>(undefined);
     const [empl, setEmpl] = useState<Empl | undefined>(undefined); // TODO add ALL_IMPL
     const [empl0EQEmpl1Enum, setEmpl0EQEmpl1Enum] = useState<Empl0EQEmpl1Enum | undefined>(undefined);
@@ -72,9 +76,16 @@ export default function WizardPage() {
                         ) : i === 3 ? (
                             WhatIsYourNationality({
                                 onNationalitySelect: (nationality: any) => console.log(nationality),
+                                onSubquestionSelect: (inTitle: any, outTitle: any) => {
+                                    setInTitle(inTitle);
+                                    setOutTitle(outTitle);
+                                    console.log(inTitle, outTitle);
+                                },
                                 countryName: supportedCountries[selectedInCountry],
                                 inCountry: selectedInCountry!,
-                                outCountry: selectedOutCountry!
+                                outCountry: selectedOutCountry!,
+                                time: selectedTime!,
+                                secondment: secondment!
                             })
                         ) : i === 4 ? (
                             WhereAreYouCurrentlyEmployed({
