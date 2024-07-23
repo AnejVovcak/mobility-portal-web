@@ -10,21 +10,14 @@ export async function POST(req) {
 
         const collection = db.collection('mig');
         
-        /* const filter = {
-            $and: [
-                { secondment: secondment },
-                { outCountry: outCountry },
-                { inCountry: inCountry },
-                { outTitle: outTitle },
-                { inTitle: inTitle },
-                { time: time },
-                { nat: { $in: nat } }
-            ]
-        }; */
-
         const filter = {
             $and: [
-                { secondment: body.secondment },
+                { secondment: { $in: body.secondment } },
+                { out_value: { $in: body.outCountry } },
+                { in_value: { $in: body.inCountry } },
+                { out_title: { $in: body.outTitle } },
+                { in_title: { $in: body.inTitle } },
+                { time: { $in: body.time } },
             ]
         };
 

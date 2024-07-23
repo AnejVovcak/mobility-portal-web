@@ -20,6 +20,7 @@ import { InTitleEnum } from '../lib/definitions/InTitleEnum';
 import { OutTitleEnum } from '../lib/definitions/OutTitleEnum';
 import { NatMig } from '../lib/definitions/nationality';
 import { getRoadmapData } from '../lib/roadmap';
+import { isEu } from '../lib/utils/isEu';
 
 export default function WizardPage() {
 
@@ -36,6 +37,7 @@ export default function WizardPage() {
     const [empl0EQEmpl1Enum, setEmpl0EQEmpl1Enum] = useState<Empl0EQEmpl1Enum | undefined>(undefined);
     const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
     const [taxResidencyArr, setTaxResidenceArr] = useState<Tax[] | undefined>(undefined);
+    const [showAnswers, setShowAnswers] = useState(false);
 
 
     const getInCountiesOptions = () => {
@@ -52,9 +54,51 @@ export default function WizardPage() {
         }
     }
 
+    const generateBody = () => {
+        let secondmentArr = [];
+        secondmentArr.push(secondment);
+        secondmentArr.push('ALL SECONDMENT');
+
+        let outCountryArr = [];
+        outCountryArr.push(selectedOutCountry);
+        outCountryArr.push('ALL COUNTRIES');
+        if (isEu(selectedOutCountry!)) {
+            outCountryArr.push('ALL EU');
+        }
+
+        let inCountryArr = [];
+        inCountryArr.push(selectedInCountry);
+        inCountryArr.push('ALL COUNTRIES');
+        if (isEu(selectedInCountry!)) {
+            inCountryArr.push('ALL EU');
+        }
+
+        let outTitleArr = [];
+        outTitleArr.push(outTitle);
+
+        let inTitleArr = [];
+        inTitleArr.push(inTitle);
+
+        let timeArr = [];
+        timeArr.push(selectedTime);
+        timeArr.push('ALL DURATIONS');
+
+        let body = {
+            secondment: secondmentArr,
+            outCountry: outCountryArr,
+            inCountry: inCountryArr,
+            outTitle: outTitleArr,
+            inTitle: inTitleArr,
+            time: timeArr
+        }
+
+        return body;
+    }
+
     return (
         <div>
-            {Array.from({length: numOfQuestions}, (_, i) => (
+            {//show the questions if showAnswers
+            !showAnswers && Array.from({length: numOfQuestions}, (_, i) => (
                 <QuestionCard
                     key={i}
                     childComponent={
@@ -129,30 +173,25 @@ export default function WizardPage() {
                     onNext={() => setIndex(index + 1)}
                     onBack={() => setIndex(index - 1)}
                     //on submit print all the filters
-                    onSubmit={async () => {
+                    onSubmit={ () => {
                         try {
                             //const response = await fetch(`/api/roadmap?secondment=${secondment}&outCountry=${selectedOutCountry}&inCountry=${selectedInCountry}&outTitle=${outTitle}&inTitle=${inTitle}&time=${selectedTime}&nat=${NatMig}`);
-                            const response = await fetch(`/api/roadmap`, {
+                            const response = fetch(`/api/roadmap`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
-                                body: JSON.stringify({
-                                    secondment: secondment,
-                                    outCountry: selectedOutCountry,
-                                    inCountry: selectedInCountry,
-                                    outTitle: outTitle,
-                                    inTitle: inTitle,
-                                    time: selectedTime,
-                                }),
+                                body: JSON.stringify(generateBody()),
+                            }).then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                const data = response.json();
+                                console.log(data);
+
+                                //hide questions
+                                setShowAnswers(true);
                             });
-                    
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                    
-                            const data = await response.json();
-                            console.log(data);
                         } catch (e) {
                             console.error(e);
                         }
@@ -160,6 +199,12 @@ export default function WizardPage() {
                     }
                 />
             ))}
+
+            <div>
+                {showAnswers && (
+                    <p>asdddsadsa</p>
+                )}
+            </div>
         </div>
     );
 }
