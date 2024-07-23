@@ -132,8 +132,27 @@ export default function WizardPage() {
                     onSubmit={async () => {
                         try {
                             //const response = await fetch(`/api/roadmap?secondment=${secondment}&outCountry=${selectedOutCountry}&inCountry=${selectedInCountry}&outTitle=${outTitle}&inTitle=${inTitle}&time=${selectedTime}&nat=${NatMig}`);
-                            const response = await fetch('/api/roadmap');
-                            console.log(response);
+                            const response = await fetch(`/api/roadmap`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    secondment: secondment,
+                                    outCountry: selectedOutCountry,
+                                    inCountry: selectedInCountry,
+                                    outTitle: outTitle,
+                                    inTitle: inTitle,
+                                    time: selectedTime,
+                                }),
+                            });
+                    
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                    
+                            const data = await response.json();
+                            console.log(data);
                         } catch (e) {
                             console.error(e);
                         }

@@ -1,12 +1,10 @@
 import clientPromise from "@/app/lib/mongodb";
 
-export async function GET(
-    req: Request,
-    res: Response,
-){
-    //const { secondment, outCountry, inCountry, outTitle, inTitle, time, nat } = req.query;
-
+export async function POST(req) {
     try {
+        const body = await req.json();
+        console.log(body);
+
         const client = await clientPromise;
         const db = client.db('lawBrainerDevelopment');
 
@@ -22,6 +20,12 @@ export async function GET(
                 { time: time },
                 { nat: { $in: nat } }
             ]
+        }; */
+
+        const filter = {
+            $and: [
+                { secondment: body.secondment },
+            ]
         };
 
         const sort = {
@@ -29,10 +33,7 @@ export async function GET(
             date: 1
         };
 
-        const data = await collection.find(filter).sort(sort).toArray(); */
-
-        //get all data
-        const data = await collection.find({}).toArray();
+        const data = await collection.find(filter).sort(sort).toArray();
 
         return new Response(JSON.stringify({ data }), {
             status: 200,
