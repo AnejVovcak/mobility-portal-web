@@ -11,14 +11,14 @@ export async function POST(req) {
 
         const filter = {
             $and: [
-                { secondment: { $in: body.secondment } },
-                { out_value: { $in: body.outCountry } },
-                { in_value: { $in: body.inCountry } },
-                { out_title: { $in: body.outTitle } },
-                { in_title: { $in: body.inTitle } },
-                { time: { $in: body.time } },
-                {nat: { $in: body.nationality } }
-            ]
+                body.secondment.length > 0 ? { secondment: { $in: body.secondment } } : {},
+                body.outCountry.length > 0 ? { out_value: { $in: body.outCountry } } : {},
+                body.inCountry.length > 0 ? { in_value: { $in: body.inCountry } } : {},
+                body.outTitle.length > 0 ? { out_title: { $in: body.outTitle } } : {},
+                body.inTitle.length > 0 ? { in_title: { $in: body.inTitle } } : {},
+                body.time.length > 0 ? { time: { $in: body.time } } : {},
+                body.nationality.length > 0 ? { nat: { $in: body.nationality } } : {}
+            ].filter(condition => Object.keys(condition).length > 0) // Remove empty objects
         };
 
         const sort = {

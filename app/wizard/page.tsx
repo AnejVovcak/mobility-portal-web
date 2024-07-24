@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import QuestionCard from '../ui/QuestionCard';
 import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
 import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
@@ -37,7 +37,7 @@ export default function WizardPage() {
     const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
     const [taxResidencyArr, setTaxResidenceArr] = useState<Tax[] | undefined>(undefined);
     const [showAnswers, setShowAnswers] = useState(false);
-    const [content, setContent] = useState<any>(null);
+    const [content, setContent] = useState<Array<{ content: string }>>([]);
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
@@ -53,16 +53,16 @@ export default function WizardPage() {
     };
 
     const generateMigBody = () => {
-        let secondmentArr = [secondment, 'ALL SECONDMENT'];
-        let outCountryArr = [selectedOutCountry, 'ALL COUNTRIES'];
+        let secondmentArr:string[] = [secondment, SecondmentEnum.ALL_SECONDMENT];
+        let outCountryArr:string[] = [selectedOutCountry!, 'ALL COUNTRIES'];
         if (isEu(selectedOutCountry!))
             outCountryArr.push('ALL EU');
-        let inCountryArr = [selectedInCountry, 'ALL COUNTRIES'];
+        let inCountryArr:string[] = [selectedInCountry!, 'ALL COUNTRIES'];
         if (isEu(selectedInCountry!))
             inCountryArr.push('ALL EU');
-        let outTitleArr = outTitle ? [outTitle] :undefined;
-        let inTitleArr = inTitle ? [inTitle] :undefined
-        let timeArr = [selectedTime, 'ALL DURATIONS'];
+        let outTitleArr:string[] = outTitle ? [outTitle] :[];
+        let inTitleArr:string[] = inTitle ? [inTitle] :[]
+        let timeArr:string[] = [selectedTime!, 'ALL DURATIONS'];
         let natArr:NatMig[] = [NatMig.AllNationalities];
         if (isEu(nat!)){
             natArr.push(NatMig.EuCitizens)
@@ -86,15 +86,27 @@ export default function WizardPage() {
         }
 
         return {
-            secondment: secondmentArr,
-            outCountry: outCountryArr,
-            inCountry: inCountryArr,
-            outTitle: outTitleArr,
-            inTitle: inTitleArr,
-            time: timeArr,
-            nationality: natArr,
+            secondment: secondmentArr || [],
+            outCountry: outCountryArr || [],
+            inCountry: inCountryArr || [],
+            outTitle: outTitleArr || [],
+            inTitle: inTitleArr || [],
+            time: timeArr || [],
+            nationality: natArr || []
         };
     };
+
+    const generateMockMigrationData = () => {
+        return {
+            secondment: [SecondmentEnum.NO_SECONDMENT, SecondmentEnum.ALL_SECONDMENT],
+            outCountry: [CountryCode.POR, 'ALL COUNTRIES','ALL EU'],
+            inCountry: [CountryCode.SLO, 'ALL COUNTRIES','ALL EU'],
+            outTitle: outTitle ? [outTitle] : [],
+            inTitle: inTitle ? [inTitle] : [],
+            time: [MigTime.LessThan90Days, 'ALL DURATIONS'],
+            nationality: [NatMig.EuCitizens, NatMig.AllNationalities,NatMig.EuCitizens,NatMig.NonBelgians]
+        }
+    }
 
     const renderQuestion = (i: number) => {
         switch (i) {
@@ -185,11 +197,12 @@ export default function WizardPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(generateMigBody()),
+                body: JSON.stringify(generateMockMigrationData()),
             });
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            console.log(data);
+            console.log(data)
+            setContent(data.data);
             setShowAnswers(true);
         } catch (e) {
             console.error(e);
@@ -212,7 +225,15 @@ export default function WizardPage() {
                     />
                 ))
             )}
-            {showAnswers && <p>Answers</p>}
+            {showAnswers && content && (
+                <div>
+                    <p>Answers:</p>
+                    {content.map((item, index) => (
+                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                    ))}
+                </div>
+            )}
+            <button onClick={handleSubmit}>mock</button>
         </div>
     );
 }
