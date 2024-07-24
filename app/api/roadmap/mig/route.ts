@@ -6,10 +6,9 @@ export async function POST(req) {
         console.log(body);
 
         const client = await clientPromise;
-        const db = client.db('lawBrainerDevelopment');
+        const db = client.db('lawBrainerProduction');
+        const collection = db.collection('migDev');
 
-        const collection = db.collection('mig');
-        
         const filter = {
             $and: [
                 { secondment: { $in: body.secondment } },
@@ -18,6 +17,7 @@ export async function POST(req) {
                 { out_title: { $in: body.outTitle } },
                 { in_title: { $in: body.inTitle } },
                 { time: { $in: body.time } },
+                {nat: { $in: body.nationality } }
             ]
         };
 

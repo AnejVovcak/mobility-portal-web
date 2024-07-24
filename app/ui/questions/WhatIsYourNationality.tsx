@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
 import Nationality, {NatMig} from "@/app/lib/definitions/nationality";
 import {CountryCode} from "@/app/lib/definitions/countries";
-import { InTitleEnum } from "@/app/lib/definitions/InTitleEnum";
-import { OutTitleEnum } from "@/app/lib/definitions/OutTitleEnum";
-import { MigTime } from "@/app/lib/definitions/time";
-import { SecondmentEnum } from "@/app/lib/definitions/SecondmentEnum";
+import {InTitleEnum} from "@/app/lib/definitions/InTitleEnum";
+import {OutTitleEnum} from "@/app/lib/definitions/OutTitleEnum";
+import {MigTime} from "@/app/lib/definitions/time";
+import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
 
 interface WhatIsYourNationalityProps {
     inCountry: CountryCode;
@@ -12,7 +12,7 @@ interface WhatIsYourNationalityProps {
     time: MigTime;
     secondment: SecondmentEnum;
     countryName: string;
-    onNationalitySelect: (nationality: NatMig) => void;
+    onNationalitySelect: (nationality: string) => void;
     onSubquestionSelect: (inTitle?: InTitleEnum, outTitle?: OutTitleEnum) => void;
 }
 
@@ -45,14 +45,8 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
     const onSelectNationality = (countryCode: string) => {
         const eu = isEu(countryCode);
         setSelectedNationality(countryCode);
-        console.log(`Country ${countryCode} is in EU: ${eu}`);
-        console.log(`Country ${props.outCountry} is in EU: ${isEu(props.outCountry)}`);
-        console.log(`Country ${props.inCountry}`);
 
-        if (eu) {
-            props.onNationalitySelect(NatMig.EuCitizens);
-            return;
-        }
+        props.onNationalitySelect(countryCode);
     }
 
     const onSelectSchengenVisa = () => {

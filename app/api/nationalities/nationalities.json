@@ -1241,7 +1241,7 @@
   {
     "num_code": "620",
     "alpha_2_code": "PT",
-    "alpha_3_code": "PRT",
+    "alpha_3_code": "POR",
     "en_short_name": "Portugal",
     "nationality": "Portuguese"
   },
@@ -1269,7 +1269,7 @@
   {
     "num_code": "642",
     "alpha_2_code": "RO",
-    "alpha_3_code": "ROU",
+    "alpha_3_code": "ROM",
     "en_short_name": "Romania",
     "nationality": "Romanian"
   },
@@ -1416,7 +1416,7 @@
   {
     "num_code": "705",
     "alpha_2_code": "SI",
-    "alpha_3_code": "SVN",
+    "alpha_3_code": "SLO",
     "en_short_name": "Slovenia",
     "nationality": "Slovenian, Slovene"
   },
@@ -1640,7 +1640,7 @@
   {
     "num_code": "826",
     "alpha_2_code": "GB",
-    "alpha_3_code": "GBR",
+    "alpha_3_code": "UK",
     "en_short_name": "United Kingdom of Great Britain and Northern Ireland",
     "nationality": "British, UK"
   },

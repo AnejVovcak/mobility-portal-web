@@ -7,7 +7,7 @@ import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
 interface WhereAreYouGoingProps {
     countries: { [key in CountryCode]: string };
     onSelect: (country?: CountryCode) => void;
-    onSelectSecondment: (secondment?: SecondmentEnum) => void;
+    onSelectSecondment: (secondment: SecondmentEnum) => void;
 }
 
 export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
