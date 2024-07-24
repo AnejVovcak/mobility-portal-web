@@ -7,14 +7,14 @@ export async function POST(req) {
 
         const client = await clientPromise;
         const db = client.db('lawBrainerProduction');
-        const collection = db.collection('socSecDev');
+        const collection = db.collection('taxDev');
 
         const filter = {
             $and: [
                 body.outCountry.length > 0 ? { out_value: { $in: body.outCountry } } : {},
-                body.insured.length > 0 ? { in_value: { $in: body.insured } } : {},
+                body.inCountry.length > 0 ? { in_value: { $in: body.inCountry } } : {},
                 body.empl.length > 0 ? { empl: { $in: body.empl } } : {},
-                body.if_empl0_eq_empl1.length > 0 ? { if_empl0_eq_empl1: { $in: body.if_empl0_eq_empl1 } } : {},
+                body.tax.length > 0 ? { tax: { $in: body.tax } } : {},
             ].filter(condition => Object.keys(condition).length > 0) // Remove empty objects
         };
 

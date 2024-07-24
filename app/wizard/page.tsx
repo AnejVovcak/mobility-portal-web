@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import QuestionCard from '../ui/QuestionCard';
 import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
 import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
@@ -39,6 +39,7 @@ export default function WizardPage() {
     const [showAnswers, setShowAnswers] = useState(false);
     const [contentMig, setContentMig] = useState<Array<{ content: string }>>([]);
     const [contentSocSec, setContentSocSec] = useState<Array<{ content: string }>>([]);
+    const [contentTax, setContentTax] = useState<Array<{ content: string }>>([]);
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
@@ -67,6 +68,7 @@ export default function WizardPage() {
         let natArr:NatMig[] = [NatMig.AllNationalities];
         let emplArr:Empl[] = [Empl.ALL_EMPL];
         let empl0EQEmpl1EnumArr:Empl0EQEmpl1Enum[] = [Empl0EQEmpl1Enum.ALL_EMPL,Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1];
+        let taxArr:Tax[] = taxResidencyArr || []
 
         if(empl) emplArr.push(empl)
         if (empl0EQEmpl1Enum) empl0EQEmpl1EnumArr.push(empl0EQEmpl1Enum)
@@ -92,6 +94,10 @@ export default function WizardPage() {
             natArr.push(NatMig.NonBelgians)
         }
 
+        let insArr:string[] = [insured!, 'ALL COUNTRIES'];
+        if (isEu(insured!))
+            insArr.push('ALL EU');
+
         return {
             secondment: secondmentArr || [],
             outCountry: outCountryArr || [],
@@ -102,6 +108,8 @@ export default function WizardPage() {
             nationality: natArr || [],
             empl: emplArr || [],
             if_empl0_eq_empl1: empl0EQEmpl1EnumArr || [],
+            tax: taxArr || [],
+            insured: insArr || []
         };
     };
 
@@ -116,6 +124,8 @@ export default function WizardPage() {
             nationality: [NatMig.EuCitizens, NatMig.AllNationalities,NatMig.EuCitizens,NatMig.NonBelgians],
             empl: [Empl.ALL_EMPL],
             if_empl0_eq_empl1: [Empl0EQEmpl1Enum.ALL_EMPL,Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1],
+            tax: [Tax.AllTax],
+            insured: [CountryCode.BEL, 'ALL COUNTRIES','ALL EU']
         }
     }
 
@@ -217,17 +227,26 @@ export default function WizardPage() {
                 },
                 body: JSON.stringify(generateMockData()),
             });
+            const responseTax = await fetch(`/api/roadmap/tax`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(generateMockData()),
+            });
 
             if (!responseMig.ok) throw new Error('Network response was not ok');
             if (!responseSocSec.ok) throw new Error('Network response was not ok');
+            if (!responseTax.ok) throw new Error('Network response was not ok');
 
             const dataMig = await responseMig.json();
             const dataSocSec = await responseSocSec.json();
+            const dataTax = await responseTax.json();
 
-            console.log(dataSocSec)
-            //add dataMig and dataSocSec to the content array
-            setContentMig([dataMig.data]);
-            setContentSocSec([dataSocSec.data]);
+            console.log(dataSocSec);
+            setContentMig(dataMig.data);
+            setContentSocSec(dataSocSec.data);
+            setContentTax(dataTax.data);
             setShowAnswers(true);
         } catch (e) {
             console.error(e);
@@ -251,27 +270,36 @@ export default function WizardPage() {
                 ))
             )}
 
-            {showAnswers && contentMig && contentSocSec && (
+            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && (
                 <div>
-                    <h1>Filters:</h1>
+                    <h1 className="text-red-600 font-bold">Filters:</h1>
                     <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
                 </div>
             )}
 
-            {showAnswers && contentMig && (
+            {showAnswers && contentMig.length > 0 && (
                 <div>
-                    <h1>Mig:</h1>
+                    <h1 className="text-red-600 font-bold">Mig:</h1>
                     {contentMig.map((item, index) => (
                         <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
                     ))}
                 </div>
             )}
 
-            {showAnswers && contentSocSec && (
+            {showAnswers && contentSocSec.length > 0 && (
                 <div>
-                    <h1>SocSec:</h1>
+                    <h1 className="text-red-600 font-bold">SocSec:</h1>
                     {contentSocSec.map((item, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{__html: item.content}}/>
+                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                    ))}
+                </div>
+            )}
+
+            {showAnswers && contentTax.length > 0 && (
+                <div>
+                    <h1 className="text-red-600 font-bold">Tax:</h1>
+                    {contentTax.map((item, index) => (
+                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
                     ))}
                 </div>
             )}
