@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import QuestionCard from '../ui/QuestionCard';
 import WhereAreYouFrom from '../ui/questions/WhereAreYouFrom';
 import {CountryCode, supportedCountries} from "@/app/lib/definitions/countries";
@@ -37,7 +37,8 @@ export default function WizardPage() {
     const [insured, setInsured] = useState<CountryCode | undefined>(undefined);
     const [taxResidencyArr, setTaxResidenceArr] = useState<Tax[] | undefined>(undefined);
     const [showAnswers, setShowAnswers] = useState(false);
-    const [content, setContent] = useState<Array<{ content: string }>>([]);
+    const [contentMig, setContentMig] = useState<Array<{ content: string }>>([]);
+    const [contentSocSec, setContentSocSec] = useState<Array<{ content: string }>>([]);
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
@@ -52,7 +53,7 @@ export default function WizardPage() {
         };
     };
 
-    const generateMigBody = () => {
+    const generateBody = () => {
         let secondmentArr:string[] = [secondment, SecondmentEnum.ALL_SECONDMENT];
         let outCountryArr:string[] = [selectedOutCountry!, 'ALL COUNTRIES'];
         if (isEu(selectedOutCountry!))
@@ -64,6 +65,12 @@ export default function WizardPage() {
         let inTitleArr:string[] = inTitle ? [inTitle] :[]
         let timeArr:string[] = [selectedTime!, 'ALL DURATIONS'];
         let natArr:NatMig[] = [NatMig.AllNationalities];
+        let emplArr:Empl[] = [Empl.ALL_EMPL];
+        let empl0EQEmpl1EnumArr:Empl0EQEmpl1Enum[] = [Empl0EQEmpl1Enum.ALL_EMPL,Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1];
+
+        if(empl) emplArr.push(empl)
+        if (empl0EQEmpl1Enum) empl0EQEmpl1EnumArr.push(empl0EQEmpl1Enum)
+
         if (isEu(nat!)){
             natArr.push(NatMig.EuCitizens)
         } else {
@@ -92,11 +99,13 @@ export default function WizardPage() {
             outTitle: outTitleArr || [],
             inTitle: inTitleArr || [],
             time: timeArr || [],
-            nationality: natArr || []
+            nationality: natArr || [],
+            empl: emplArr || [],
+            if_empl0_eq_empl1: empl0EQEmpl1EnumArr || [],
         };
     };
 
-    const generateMockMigrationData = () => {
+    const generateMockData = () => {
         return {
             secondment: [SecondmentEnum.NO_SECONDMENT, SecondmentEnum.ALL_SECONDMENT],
             outCountry: [CountryCode.POR, 'ALL COUNTRIES','ALL EU'],
@@ -104,7 +113,9 @@ export default function WizardPage() {
             outTitle: outTitle ? [outTitle] : [],
             inTitle: inTitle ? [inTitle] : [],
             time: [MigTime.LessThan90Days, 'ALL DURATIONS'],
-            nationality: [NatMig.EuCitizens, NatMig.AllNationalities,NatMig.EuCitizens,NatMig.NonBelgians]
+            nationality: [NatMig.EuCitizens, NatMig.AllNationalities,NatMig.EuCitizens,NatMig.NonBelgians],
+            empl: [Empl.ALL_EMPL],
+            if_empl0_eq_empl1: [Empl0EQEmpl1Enum.ALL_EMPL,Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1],
         }
     }
 
@@ -192,17 +203,31 @@ export default function WizardPage() {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`/api/roadmap/mig`, {
+            const responseMig = await fetch(`/api/roadmap/mig`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(generateMockMigrationData()),
+                body: JSON.stringify(generateMockData()),
             });
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            console.log(data)
-            setContent(data.data);
+            const responseSocSec = await fetch(`/api/roadmap/socSec`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(generateMockData()),
+            });
+
+            if (!responseMig.ok) throw new Error('Network response was not ok');
+            if (!responseSocSec.ok) throw new Error('Network response was not ok');
+
+            const dataMig = await responseMig.json();
+            const dataSocSec = await responseSocSec.json();
+
+            console.log(dataSocSec)
+            //add dataMig and dataSocSec to the content array
+            setContentMig([dataMig.data]);
+            setContentSocSec([dataSocSec.data]);
             setShowAnswers(true);
         } catch (e) {
             console.error(e);
@@ -225,11 +250,28 @@ export default function WizardPage() {
                     />
                 ))
             )}
-            {showAnswers && content && (
+
+            {showAnswers && contentMig && contentSocSec && (
                 <div>
-                    <p>Answers:</p>
-                    {content.map((item, index) => (
+                    <h1>Filters:</h1>
+                    <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
+                </div>
+            )}
+
+            {showAnswers && contentMig && (
+                <div>
+                    <h1>Mig:</h1>
+                    {contentMig.map((item, index) => (
                         <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                    ))}
+                </div>
+            )}
+
+            {showAnswers && contentSocSec && (
+                <div>
+                    <h1>SocSec:</h1>
+                    {contentSocSec.map((item, index) => (
+                        <div key={index} dangerouslySetInnerHTML={{__html: item.content}}/>
                     ))}
                 </div>
             )}

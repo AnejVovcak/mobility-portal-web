@@ -9,7 +9,7 @@ interface WhereAreYouGoingToBeEmployedProps {
     currentlyEmployed: CountryCode | undefined;
     countries: { [key in CountryCode]: string };
     onSelectEmpl: (empl?: Empl) => void;
-    onSelectTripType: (tripType?: Empl0EQEmpl1Enum) => void;
+    onSelectTripType: (tripType: Empl0EQEmpl1Enum) => void;
 }
 
 export default function WhereAreYouGoingToBeEmployed(props: WhereAreYouGoingToBeEmployedProps) {
