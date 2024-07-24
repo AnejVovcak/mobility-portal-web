@@ -1,6 +1,8 @@
 import clientPromise from "@/app/lib/mongodb";
+import {Sort} from "mongodb";
+import {NextRequest} from "next/server";
 
-export async function POST(req) {
+export async function POST(req:NextRequest) {
     try {
         const body = await req.json();
         console.log(body);
@@ -18,7 +20,7 @@ export async function POST(req) {
             ].filter(condition => Object.keys(condition).length > 0) // Remove empty objects
         };
 
-        const sort = {
+        const sort:Sort = {
             title: 1,
             date: 1
         };

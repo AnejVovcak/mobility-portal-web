@@ -1,6 +1,6 @@
 import nationalities from './nationalities.json';
 
-export async function GET(request) {
+export async function GET() {
     try {
         return new Response(JSON.stringify({nationalities}), {
             status: 200,
