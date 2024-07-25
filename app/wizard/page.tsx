@@ -301,18 +301,20 @@ export default function WizardPage() {
     return (
         <div>
             {!showAnswers && (
-                Array.from({ length: numOfQuestions }, (_, i) => (
-                    <QuestionCard
-                        key={i}
-                        childComponent={renderQuestion(i)}
-                        visible={index === i}
-                        isFirst={i === 0}
-                        isLast={i === numOfQuestions - 1}
-                        onNext={() => setIndex(index + 1)}
-                        onBack={() => setIndex(index - 1)}
-                        onSubmit={handleSubmit}
-                    />
-                ))
+                <div className="question-card-container">
+                    {Array.from({ length: numOfQuestions }, (_, i) => (
+                        <QuestionCard
+                            key={i}
+                            childComponent={renderQuestion(i)}
+                            visible={index === i}
+                            isFirst={i === 0}
+                            isLast={i === numOfQuestions - 1}
+                            onNext={() => setIndex(index + 1)}
+                            onBack={() => setIndex(index - 1)}
+                            onSubmit={handleSubmit}
+                        />
+                    ))}
+                </div>
             )}
 
             {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (

@@ -12,17 +12,19 @@ interface QuestionCardProps {
   onSubmit: () => void;
 }
 
-//custom card gets the question and options as props
-//make the questions part of radio form
 export default function QuestionCard(props: QuestionCardProps) {
-	return (
-		<div style={{ display: props.visible ? 'block' : 'none' }}>
-			{props.childComponent}
-			
-			{!props.isFirst && <button onClick={props.onBack}>Back</button>}
-			{!props.isLast && <button onClick={props.onNext}>Next</button>}
-
-      {props.isLast && <button onClick={props.onSubmit}>Submit</button>}
-	  </div>
+  return (
+    <div className={`question-card ${props.visible ? 'block' : 'hidden'}`}>
+      {props.childComponent}
+      
+      <div className="button-group">
+          {!props.isFirst && <button className="button" onClick={props.onBack}>Back</button>}
+          {props.isLast ? (
+            <button className="button" onClick={props.onSubmit}>Submit</button>
+          ) : (
+            <button className="button ml-auto" onClick={props.onNext}>Next</button>
+          )}
+      </div>
+    </div>
   );
 }
