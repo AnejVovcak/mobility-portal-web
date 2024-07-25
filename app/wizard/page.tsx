@@ -20,6 +20,7 @@ import {InTitleEnum} from '../lib/definitions/InTitleEnum';
 import {OutTitleEnum} from '../lib/definitions/OutTitleEnum';
 import {isEu} from '../lib/utils/isEu';
 import {NatMig} from "@/app/lib/definitions/nationality";
+import { count } from 'console';
 
 export default function WizardPage() {
     const numOfQuestions = 8;
@@ -40,6 +41,9 @@ export default function WizardPage() {
     const [contentMig, setContentMig] = useState<Array<{ content: string }>>([]);
     const [contentSocSec, setContentSocSec] = useState<Array<{ content: string }>>([]);
     const [contentTax, setContentTax] = useState<Array<{ content: string }>>([]);
+    /* const [notSupported, setNotSupported] = useState<Array<{ boolean }>([false, false, false, false, false, false, false]); */
+    //notSupported is a map: int -> boolean
+    const [notSupported, setNotSupported] = useState<Map<number, boolean>>(new Map());
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
@@ -67,7 +71,7 @@ export default function WizardPage() {
         let timeArr:string[] = [selectedTime!, 'ALL DURATIONS'];
         let natArr:NatMig[] = [NatMig.AllNationalities];
         let emplArr:Empl[] = [Empl.ALL_EMPL];
-        let empl0EQEmpl1EnumArr:Empl0EQEmpl1Enum[] = [Empl0EQEmpl1Enum.ALL_EMPL,Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1];
+        let empl0EQEmpl1EnumArr:Empl0EQEmpl1Enum[] = [Empl0EQEmpl1Enum.ALL_EMPL];
         let taxArr:Tax[] = taxResidencyArr || []
 
         if(empl) emplArr.push(empl)
@@ -135,14 +139,25 @@ export default function WizardPage() {
                 return (
                     <WhereAreYouFrom
                         countries={supportedCountries}
-                        onSelect={(country) => setSelectedOutCountry(country)}
+                        onSelect={(country) :void => {
+                            setSelectedOutCountry(country)
+                            /* setNotSupported(country === CountryCode.OTHER) */
+                            //setNotSupported where number is 0 to true
+                            setNotSupported(new Map(notSupported).set(0, country === CountryCode.OTHER))
+                        }}
                     />
                 );
             case 1:
                 return (
                     <WhereAreYouGoing
                         countries={getInCountiesOptions()}
-                        onSelect={(country) => setSelectedInCountry(country)}
+                        /* onSelect={(country) => setSelectedInCountry(country)} */
+                        onSelect={(country) => {
+                            setSelectedInCountry(country)
+                            /* setNotSupported(country === CountryCode.OTHER) */
+                            //setNotSupported where number is 1 to true
+                            setNotSupported(new Map(notSupported).set(1, country === CountryCode.OTHER))
+                        }}
                         onSelectSecondment={(secondment) => setSecondment(secondment)}
                     />
                 );
@@ -157,11 +172,17 @@ export default function WizardPage() {
             case 3:
                 return (
                     <WhatIsYourNationality
-                        onNationalitySelect={(nationality: any) => setNat(nationality)}
+                        onNationalitySelect={(nationality: any) => {
+                            setNat(nationality)
+                            setNotSupported(new Map(notSupported).set(2, false))
+                        }}
                         onSubquestionSelect={(inTitle: any, outTitle: any) => {
                             setInTitle(inTitle);
                             setOutTitle(outTitle);
                             console.log(inTitle, outTitle);
+                            /* setNotSupported(inTitle === undefined || outTitle === undefined) */
+                            //setNotSupported where number is 3 to true
+                            setNotSupported(new Map(notSupported).set(3, inTitle === undefined || outTitle === undefined))
                         }}
                         countryName={supportedCountries[selectedInCountry!]}
                         inCountry={selectedInCountry!}
@@ -176,7 +197,13 @@ export default function WizardPage() {
                         outCountry={selectedOutCountry!}
                         inCountry={selectedInCountry!}
                         countries={supportedCountries}
-                        onSelect={(country) => setCurrentlyEmployed(country)}
+                        /* onSelect={(country) => setCurrentlyEmployed(country)} */
+                        onSelect={(country) => {
+                            setCurrentlyEmployed(country)
+                            /* setNotSupported(country === CountryCode.OTHER) */
+                            //setNotSupported where number is 4 to true
+                            setNotSupported(new Map(notSupported).set(4, country === CountryCode.OTHER))
+                        }}
                     />
                 );
             case 5:
@@ -186,7 +213,13 @@ export default function WizardPage() {
                         outCountry={selectedOutCountry!}
                         inCountry={selectedInCountry!}
                         currentlyEmployed={currentlyEmployed}
-                        onSelectEmpl={(empl) => setEmpl(empl)}
+                        /* onSelectEmpl={(empl) => setEmpl(empl)} */
+                        onSelectEmpl={(empl) => {
+                            setEmpl(empl)
+                            /* setNotSupported(empl === undefined) */
+                            //setNotSupported where number is 5 to true
+                            setNotSupported(new Map(notSupported).set(5, empl === undefined))
+                        }}
                         onSelectTripType={(empl0EQEmpl1Enum) => setEmpl0EQEmpl1Enum(empl0EQEmpl1Enum)}
                     />
                 );
@@ -194,7 +227,13 @@ export default function WizardPage() {
                 return (
                     <WhereAreYouInsured
                         countries={supportedCountries}
-                        onSelect={(country) => setInsured(country)}
+                        /* onSelect={(country) => setInsured(country)} */
+                        onSelect={(country) => {
+                            setInsured(country)
+                            /* setNotSupported(country === CountryCode.OTHER) */
+                            //setNotSupported where number is 6 to true
+                            setNotSupported(new Map(notSupported).set(6, country === CountryCode.OTHER))
+                        }}
                     />
                 );
             case 7:
@@ -203,7 +242,13 @@ export default function WizardPage() {
                         inCountry={selectedInCountry!}
                         outCountry={selectedOutCountry!}
                         countries={getTaxResidenceOptions()}
-                        onSelect={(taxResidencyArr?: Tax[]) => setTaxResidenceArr(taxResidencyArr)}
+                        /* onSelect={(taxResidencyArr?: Tax[]) => setTaxResidenceArr(taxResidencyArr)} */
+                        onSelect={(taxResidencyArr?: Tax[]) => {
+                            setTaxResidenceArr(taxResidencyArr)
+                            /* setNotSupported(taxResidencyArr === undefined) */
+                            //setNotSupported where number is 7 to true
+                            setNotSupported(new Map(notSupported).set(7, taxResidencyArr === undefined))
+                        }}
                     />
                 );
             default:
@@ -270,14 +315,14 @@ export default function WizardPage() {
                 ))
             )}
 
-            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && (
+            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
                 <div>
                     <h1 className="text-red-600 font-bold">Filters:</h1>
                     <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
                 </div>
             )}
 
-            {showAnswers && contentMig.length > 0 && (
+            {showAnswers && contentMig.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
                 <div>
                     <h1 className="text-red-600 font-bold">Mig:</h1>
                     {contentMig.map((item, index) => (
@@ -286,7 +331,7 @@ export default function WizardPage() {
                 </div>
             )}
 
-            {showAnswers && contentSocSec.length > 0 && (
+            {showAnswers && contentSocSec.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
                 <div>
                     <h1 className="text-red-600 font-bold">SocSec:</h1>
                     {contentSocSec.map((item, index) => (
@@ -295,7 +340,7 @@ export default function WizardPage() {
                 </div>
             )}
 
-            {showAnswers && contentTax.length > 0 && (
+            {showAnswers && contentTax.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
                 <div>
                     <h1 className="text-red-600 font-bold">Tax:</h1>
                     {contentTax.map((item, index) => (
@@ -303,7 +348,13 @@ export default function WizardPage() {
                     ))}
                 </div>
             )}
-            <button onClick={handleSubmit}>mock</button>
+
+            {showAnswers && Array.from(notSupported.values()).some(value => value === true) && (
+                <div>
+                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                </div>
+            )}
+            {/* <button onClick={handleSubmit}>mock</button> */}
         </div>
     );
 }

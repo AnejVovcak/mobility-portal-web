@@ -11,7 +11,7 @@ interface WhatIsYourTaxResidenceProps {
 export default function WhatIsYourTaxResidence(props: WhatIsYourTaxResidenceProps) {
 
     const onTaxSelect = (taxResidency: CountryCode) => {
-
+        
         if(taxResidency == CountryCode.OTHER){
             props.onSelect(undefined);
             return;

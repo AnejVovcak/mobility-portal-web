@@ -20,7 +20,8 @@ export default function WhereAreYouGoingToBeEmployed(props: WhereAreYouGoingToBe
             props.onSelectEmpl(Empl.EMPL0_EQ_EMPL1);
         }
         else if (props.currentlyEmployed === props.outCountry && country === props.inCountry) {
-            props.onSelectEmpl(Empl.EMPL0_EQ_EMPL1);
+            props.onSelectEmpl(Empl.EMPL0_NEQ_EMPL1);
+            props.onSelectTripType(Empl0EQEmpl1Enum.ALL_EMPL0_NEQ_EMPL1);
         }
         else {
             props.onSelectEmpl(undefined);

@@ -18,18 +18,13 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
     const onSelectCountry = (code: CountryCode) => {
         if(code == CountryCode.OTHER) {
             props.onSelect(undefined);
-            return;
         }
 
         props.onSelect(code);
 
-        if(code == CountryCode.ROM){
-            setRomania(true);
-        }
+       setRomania(code == CountryCode.ROM);
 
-        if(code == CountryCode.UK){
-            setUk(true);
-        }      
+        setUk(code == CountryCode.UK);    
     }
 
     const onSelectRom = (opt: string) => {
