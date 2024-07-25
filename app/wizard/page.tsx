@@ -20,7 +20,6 @@ import {InTitleEnum} from '../lib/definitions/InTitleEnum';
 import {OutTitleEnum} from '../lib/definitions/OutTitleEnum';
 import {isEu} from '../lib/utils/isEu';
 import {NatMig} from "@/app/lib/definitions/nationality";
-import { count } from 'console';
 
 export default function WizardPage() {
     const numOfQuestions = 8;
@@ -141,8 +140,6 @@ export default function WizardPage() {
                         countries={supportedCountries}
                         onSelect={(country) :void => {
                             setSelectedOutCountry(country)
-                            /* setNotSupported(country === CountryCode.OTHER) */
-                            //setNotSupported where number is 0 to true
                             setNotSupported(new Map(notSupported).set(0, country === CountryCode.OTHER))
                         }}
                     />
@@ -151,11 +148,8 @@ export default function WizardPage() {
                 return (
                     <WhereAreYouGoing
                         countries={getInCountiesOptions()}
-                        /* onSelect={(country) => setSelectedInCountry(country)} */
                         onSelect={(country) => {
                             setSelectedInCountry(country)
-                            /* setNotSupported(country === CountryCode.OTHER) */
-                            //setNotSupported where number is 1 to true
                             setNotSupported(new Map(notSupported).set(1, country === CountryCode.OTHER))
                         }}
                         onSelectSecondment={(secondment) => setSecondment(secondment)}
@@ -180,8 +174,6 @@ export default function WizardPage() {
                             setInTitle(inTitle);
                             setOutTitle(outTitle);
                             console.log(inTitle, outTitle);
-                            /* setNotSupported(inTitle === undefined || outTitle === undefined) */
-                            //setNotSupported where number is 3 to true
                             setNotSupported(new Map(notSupported).set(3, inTitle === undefined || outTitle === undefined))
                         }}
                         countryName={supportedCountries[selectedInCountry!]}
@@ -197,11 +189,8 @@ export default function WizardPage() {
                         outCountry={selectedOutCountry!}
                         inCountry={selectedInCountry!}
                         countries={supportedCountries}
-                        /* onSelect={(country) => setCurrentlyEmployed(country)} */
                         onSelect={(country) => {
                             setCurrentlyEmployed(country)
-                            /* setNotSupported(country === CountryCode.OTHER) */
-                            //setNotSupported where number is 4 to true
                             setNotSupported(new Map(notSupported).set(4, country === CountryCode.OTHER))
                         }}
                     />
@@ -213,11 +202,8 @@ export default function WizardPage() {
                         outCountry={selectedOutCountry!}
                         inCountry={selectedInCountry!}
                         currentlyEmployed={currentlyEmployed}
-                        /* onSelectEmpl={(empl) => setEmpl(empl)} */
                         onSelectEmpl={(empl) => {
                             setEmpl(empl)
-                            /* setNotSupported(empl === undefined) */
-                            //setNotSupported where number is 5 to true
                             setNotSupported(new Map(notSupported).set(5, empl === undefined))
                         }}
                         onSelectTripType={(empl0EQEmpl1Enum) => setEmpl0EQEmpl1Enum(empl0EQEmpl1Enum)}
@@ -227,11 +213,8 @@ export default function WizardPage() {
                 return (
                     <WhereAreYouInsured
                         countries={supportedCountries}
-                        /* onSelect={(country) => setInsured(country)} */
                         onSelect={(country) => {
                             setInsured(country)
-                            /* setNotSupported(country === CountryCode.OTHER) */
-                            //setNotSupported where number is 6 to true
                             setNotSupported(new Map(notSupported).set(6, country === CountryCode.OTHER))
                         }}
                     />
@@ -242,11 +225,8 @@ export default function WizardPage() {
                         inCountry={selectedInCountry!}
                         outCountry={selectedOutCountry!}
                         countries={getTaxResidenceOptions()}
-                        /* onSelect={(taxResidencyArr?: Tax[]) => setTaxResidenceArr(taxResidencyArr)} */
                         onSelect={(taxResidencyArr?: Tax[]) => {
                             setTaxResidenceArr(taxResidencyArr)
-                            /* setNotSupported(taxResidencyArr === undefined) */
-                            //setNotSupported where number is 7 to true
                             setNotSupported(new Map(notSupported).set(7, taxResidencyArr === undefined))
                         }}
                     />
