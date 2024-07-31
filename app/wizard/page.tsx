@@ -243,21 +243,21 @@ export default function WizardPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(generateMockData()),
+                body: JSON.stringify(generateBody()),
             });
             const responseSocSec = await fetch(`/api/roadmap/socSec`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(generateMockData()),
+                body: JSON.stringify(generateBody()),
             });
             const responseTax = await fetch(`/api/roadmap/tax`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(generateMockData()),
+                body: JSON.stringify(generateBody()),
             });
 
             if (!responseMig.ok) throw new Error('Network response was not ok');
