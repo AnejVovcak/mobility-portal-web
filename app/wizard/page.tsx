@@ -46,7 +46,10 @@ export default function WizardPage() {
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
-        delete countries[selectedOutCountry!];
+        //delete countries[selectedOutCountry!];
+        //delete countries[selectedOutCountry!] if it is not OTHER
+        if (selectedOutCountry !== CountryCode.OTHER)
+            delete countries[selectedOutCountry!];
         return countries;
     };
 
