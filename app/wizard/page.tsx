@@ -40,14 +40,28 @@ export default function WizardPage() {
     const [contentMig, setContentMig] = useState<Array<{ content: string }>>([]);
     const [contentSocSec, setContentSocSec] = useState<Array<{ content: string }>>([]);
     const [contentTax, setContentTax] = useState<Array<{ content: string }>>([]);
-    /* const [notSupported, setNotSupported] = useState<Array<{ boolean }>([false, false, false, false, false, false, false]); */
-    //notSupported is a map: int -> boolean
-    const [notSupported, setNotSupported] = useState<Map<number, boolean>>(new Map());
+    //[migration, socialSecurity, tax]
+    const [notSupported, setNotSupported] = useState<Map<number, [boolean,boolean,boolean]>>(new Map());
+    
+    const notSupportedGlobal = () => {
+        var migrationNotSupported = false;
+        var socialSecurityNotSupported = false;
+        var taxNotSupported = false;
+
+        //go trough notSupported map and check if any of the values is true, if so set the corresponding variable to true
+
+        for (let value of notSupported.values()) {
+            if (value[0]) migrationNotSupported = true;
+            if (value[1]) socialSecurityNotSupported = true;
+            if (value[2]) taxNotSupported = true;
+        }
+
+        return [migrationNotSupported, socialSecurityNotSupported, taxNotSupported]
+    }
+
 
     const getInCountiesOptions = () => {
         let countries = { ...supportedCountries };
-        //delete countries[selectedOutCountry!];
-        //delete countries[selectedOutCountry!] if it is not OTHER
         if (selectedOutCountry !== CountryCode.OTHER)
             delete countries[selectedOutCountry!];
         return countries;
@@ -143,7 +157,8 @@ export default function WizardPage() {
                         countries={supportedCountries}
                         onSelect={(country) :void => {
                             setSelectedOutCountry(country)
-                            setNotSupported(new Map(notSupported).set(0, country === CountryCode.OTHER))
+                            var tmpSupported = (country === CountryCode.OTHER)
+                            setNotSupported(new Map(notSupported).set(0, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                     />
                 );
@@ -153,10 +168,14 @@ export default function WizardPage() {
                         countries={getInCountiesOptions()}
                         onSelect={(country) => {
                             setSelectedInCountry(country)
-                            setNotSupported(new Map(notSupported).set(1, country === CountryCode.OTHER))
+                            var tmpSupported = (country === CountryCode.OTHER)
+                            setNotSupported(new Map(notSupported).set(1, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                         onSelectSecondment={(secondment) => setSecondment(secondment)}
-                        onSelectResidency={(residency) => (residency ? {} : setNotSupported(new Map(notSupported).set(1, true)))}
+                        onSelectResidency={(residency) => {
+                            var tmpSupported = (residency)
+                            setNotSupported(new Map(notSupported).set(1, [false, !tmpSupported, false]))
+                        }}
                     />
                 );
             case 2:
@@ -172,13 +191,14 @@ export default function WizardPage() {
                     <WhatIsYourNationality
                         onNationalitySelect={(nationality: any) => {
                             setNat(nationality)
-                            setNotSupported(new Map(notSupported).set(2, false))
+                            setNotSupported(new Map(notSupported).set(2, [false, false, false]))
                         }}
                         onSubquestionSelect={(inTitle: any, outTitle: any) => {
                             setInTitle(inTitle);
                             setOutTitle(outTitle);
                             console.log(inTitle, outTitle);
-                            setNotSupported(new Map(notSupported).set(3, inTitle === undefined || outTitle === undefined))
+                            var tmpSupported = (inTitle === undefined || outTitle === undefined)
+                            setNotSupported(new Map(notSupported).set(3, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                         countryName={supportedCountries[selectedInCountry!]}
                         inCountry={selectedInCountry!}
@@ -195,7 +215,8 @@ export default function WizardPage() {
                         countries={supportedCountries}
                         onSelect={(country) => {
                             setCurrentlyEmployed(country)
-                            setNotSupported(new Map(notSupported).set(4, country === CountryCode.OTHER))
+                            var tmpSupported = (country === CountryCode.OTHER)
+                            setNotSupported(new Map(notSupported).set(4, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                     />
                 );
@@ -208,7 +229,8 @@ export default function WizardPage() {
                         currentlyEmployed={currentlyEmployed}
                         onSelectEmpl={(empl) => {
                             setEmpl(empl)
-                            setNotSupported(new Map(notSupported).set(5, empl === undefined))
+                            var tmpSupported = (empl === undefined)
+                            setNotSupported(new Map(notSupported).set(5, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                         onSelectTripType={(empl0EQEmpl1Enum) => setEmpl0EQEmpl1Enum(empl0EQEmpl1Enum)}
                     />
@@ -219,7 +241,8 @@ export default function WizardPage() {
                         countries={supportedCountries}
                         onSelect={(country) => {
                             setInsured(country)
-                            setNotSupported(new Map(notSupported).set(6, country === CountryCode.OTHER))
+                            var tmpSupported = (country === CountryCode.OTHER)
+                            setNotSupported(new Map(notSupported).set(6, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                     />
                 );
@@ -231,7 +254,8 @@ export default function WizardPage() {
                         countries={getTaxResidenceOptions()}
                         onSelect={(taxResidencyArr?: Tax[]) => {
                             setTaxResidenceArr(taxResidencyArr)
-                            setNotSupported(new Map(notSupported).set(7, taxResidencyArr === undefined))
+                            var tmpSupported = (taxResidencyArr === undefined)
+                            setNotSupported(new Map(notSupported).set(7, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                     />
                 );
@@ -301,45 +325,43 @@ export default function WizardPage() {
                 </div>
             )}
 
-            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
+            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && notSupportedGlobal().some(value => value === false) && (
                 <div>
                     <h1 className="text-red-600 font-bold">Filters:</h1>
                     <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
                 </div>
             )}
 
-            {showAnswers && contentMig.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
-                <div>
-                    <h1 className="text-red-600 font-bold">Mig:</h1>
-                    {contentMig.map((item, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                    ))}
-                </div>
-            )}
-
-            {showAnswers && contentSocSec.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
-                <div>
-                    <h1 className="text-red-600 font-bold">SocSec:</h1>
-                    {contentSocSec.map((item, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                    ))}
-                </div>
-            )}
-
-            {showAnswers && contentTax.length > 0 && !Array.from(notSupported.values()).some(value => value === true) && (
-                <div>
-                    <h1 className="text-red-600 font-bold">Tax:</h1>
-                    {contentTax.map((item, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                    ))}
-                </div>
-            )}
-
-            {showAnswers && Array.from(notSupported.values()).some(value => value === true) && (
-                <div>
+            <div>
+                <h1 className="text-red-600 font-bold">Migration:</h1>
+                {showAnswers && contentMig.length > 0 && !notSupportedGlobal()[0] && ( contentMig.map((item, index) => (
+                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                )))}
+                {showAnswers && contentMig.length > 0 && notSupportedGlobal()[0] &&
                     <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
-                </div>
-            )}
+                }
+            </div>
+
+            <div>
+                <h1 className="text-red-600 font-bold">Social Security:</h1>
+                {showAnswers && contentSocSec.length > 0 && !notSupportedGlobal()[1] && ( contentSocSec.map((item, index) => (
+                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                )))}
+                {showAnswers && contentSocSec.length > 0 && notSupportedGlobal()[1] &&
+                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                }
+            </div>
+
+            <div>
+                <h1 className="text-red-600 font-bold">Tax:</h1>
+                {showAnswers && contentTax.length > 0 && !notSupportedGlobal()[2] && ( contentTax.map((item, index) => (
+                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                )))}
+                {showAnswers && contentTax.length > 0 && notSupportedGlobal()[2] &&
+                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                }
+            </div>
+
             {/* <button onClick={handleSubmit}>mock</button> */}
         </div>
     );
