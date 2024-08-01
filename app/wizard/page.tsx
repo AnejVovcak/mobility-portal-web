@@ -153,6 +153,7 @@ export default function WizardPage() {
                             setNotSupported(new Map(notSupported).set(1, country === CountryCode.OTHER))
                         }}
                         onSelectSecondment={(secondment) => setSecondment(secondment)}
+                        onSelectResidency={(residency) => (residency ? {} : setNotSupported(new Map(notSupported).set(1, true)))}
                     />
                 );
             case 2:

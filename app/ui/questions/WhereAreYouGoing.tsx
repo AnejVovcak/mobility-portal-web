@@ -6,8 +6,9 @@ import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
 
 interface WhereAreYouGoingProps {
     countries: { [key in CountryCode]: string };
-    onSelect: (country?: CountryCode) => void;
+    onSelect: (country: CountryCode) => void;
     onSelectSecondment: (secondment: SecondmentEnum) => void;
+    onSelectResidency: (residency: boolean) => void;
 }
 
 export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
@@ -16,23 +17,14 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
     const [uk, setUk] = useState<boolean>(false);
 
     const onSelectCountry = (code: CountryCode) => {
-        if(code == CountryCode.OTHER) {
-            props.onSelect(undefined);
-        }
-
         props.onSelect(code);
 
-       setRomania(code == CountryCode.ROM);
-
+        setRomania(code == CountryCode.ROM);
         setUk(code == CountryCode.UK);    
     }
 
     const onSelectRom = (opt: string) => {
-        if(opt == 'yes'){
-            props.onSelect(CountryCode.ROM);
-        } else {
-            props.onSelect(undefined);
-        }
+        props.onSelectResidency(opt == 'yes');
     }
 
     const onSelectUk = (opt: string) => {
@@ -67,14 +59,16 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
                         <div>
                             <input type="radio"
                                    value="yes"
+                                   name="romania"
                                    onClick={() => onSelectRom('yes')}/>
                             <label>Yes</label>
                         </div>
                         <div>
                             <input type="radio"
                                    value="not_needed"
+                                      name="romania"
                                    onClick={() => onSelectRom('not_needed')}/>
-                            <label>No, but I don't need to obtain one</label>
+                            <label>No</label>
                         </div>
                     </div>
                 }
@@ -85,12 +79,14 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
                         <div>
                             <input type="radio"
                                    value="yes"
+                                   name="uk"
                                    onClick={() => onSelectUk('yes')}/>
                             <label>Yes</label>
                         </div>
                         <div>
                             <input type="radio"
                                    value="not_needed"
+                                   name="uk"
                                    onClick={() => onSelectUk('no')}/>
                             <label>No</label>
                         </div>
