@@ -325,42 +325,46 @@ export default function WizardPage() {
                 </div>
             )}
 
-            {showAnswers && contentMig.length > 0 && contentSocSec.length > 0 && notSupportedGlobal().some(value => value === false) && (
+            {showAnswers && (
                 <div>
-                    <h1 className="text-red-600 font-bold">Filters:</h1>
-                    <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
+                    {(
+                        <div>
+                            <h1 className="text-red-600 font-bold">Filters:</h1>
+                            <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
+                        </div>
+                    )}
+
+                    <div>
+                        <h1 className="text-red-600 font-bold">Migration:</h1>
+                        {contentMig.length > 0 && !notSupportedGlobal()[0] && ( contentMig.map((item, index) => (
+                            <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                        )))}
+                        {contentMig.length > 0 && notSupportedGlobal()[0] &&
+                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                        }
+                    </div>
+
+                    <div>
+                        <h1 className="text-red-600 font-bold">Social Security:</h1>
+                        {contentSocSec.length > 0 && !notSupportedGlobal()[1] && ( contentSocSec.map((item, index) => (
+                            <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                        )))}
+                        {contentSocSec.length > 0 && notSupportedGlobal()[1] &&
+                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                        }
+                    </div>
+
+                    <div>
+                        <h1 className="text-red-600 font-bold">Tax:</h1>
+                        {contentTax.length > 0 && !notSupportedGlobal()[2] && ( contentTax.map((item, index) => (
+                            <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
+                        )))}
+                        {contentTax.length > 0 && notSupportedGlobal()[2] &&
+                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
+                        }
+                    </div>
                 </div>
             )}
-
-            <div>
-                <h1 className="text-red-600 font-bold">Migration:</h1>
-                {showAnswers && contentMig.length > 0 && !notSupportedGlobal()[0] && ( contentMig.map((item, index) => (
-                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                )))}
-                {showAnswers && contentMig.length > 0 && notSupportedGlobal()[0] &&
-                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
-                }
-            </div>
-
-            <div>
-                <h1 className="text-red-600 font-bold">Social Security:</h1>
-                {showAnswers && contentSocSec.length > 0 && !notSupportedGlobal()[1] && ( contentSocSec.map((item, index) => (
-                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                )))}
-                {showAnswers && contentSocSec.length > 0 && notSupportedGlobal()[1] &&
-                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
-                }
-            </div>
-
-            <div>
-                <h1 className="text-red-600 font-bold">Tax:</h1>
-                {showAnswers && contentTax.length > 0 && !notSupportedGlobal()[2] && ( contentTax.map((item, index) => (
-                    <div key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
-                )))}
-                {showAnswers && contentTax.length > 0 && notSupportedGlobal()[2] &&
-                    <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this situation yet</h1>
-                }
-            </div>
 
             {/* <button onClick={handleSubmit}>mock</button> */}
         </div>
