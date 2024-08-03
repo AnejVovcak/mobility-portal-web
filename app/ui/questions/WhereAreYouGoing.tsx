@@ -55,7 +55,7 @@ export default function WhereAreYouGoing(props: WhereAreYouGoingProps) {
 
                 {romania &&
                     <div>
-                        <h2>Are you legally residing in Romania?</h2>
+                        <h2>Will you be legally residing in Romania?</h2>
                         <div>
                             <input type="radio"
                                    value="yes"
