@@ -82,8 +82,8 @@ export default function WizardPage() {
         let inCountryArr:string[] = [selectedInCountry!, 'ALL COUNTRIES'];
         if (isEu(selectedInCountry!))
             inCountryArr.push('ALL EU');
-        let outTitleArr:string[] = ['ALL OUT TITLE'];
-        let inTitleArr:string[] = ['ALL IN TITLE'];
+        let outTitleArr:string[] = [OutTitleEnum.AllOutTitle];
+        let inTitleArr:string[] = [InTitleEnum.AllInTitle];
 
         if(outTitle) outTitleArr.push(outTitle)
         if(inTitle) inTitleArr.push(inTitle)

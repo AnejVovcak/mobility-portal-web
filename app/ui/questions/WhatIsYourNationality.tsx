@@ -5,6 +5,7 @@ import {InTitleEnum} from "@/app/lib/definitions/InTitleEnum";
 import {OutTitleEnum} from "@/app/lib/definitions/OutTitleEnum";
 import {MigTime} from "@/app/lib/definitions/time";
 import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
+import {isEu} from "@/app/lib/utils/isEu";
 
 interface WhatIsYourNationalityProps {
     inCountry: CountryCode;
@@ -18,7 +19,6 @@ interface WhatIsYourNationalityProps {
 
 export default function WhatIsYourNationality(props: WhatIsYourNationalityProps) {
     const [nationalities, setNationalities] = useState<Nationality[]>([]);
-    const euCountries = ['AUT', 'BEL', 'BGR', 'HRV', 'CYP', 'CZE', 'DNK', 'EST', 'FIN', 'FRA', 'DEU', 'GRC', 'HUN', 'IRL', 'ITA', 'LVA', 'LTU', 'LUX', 'MLT', 'NLD', 'POL', 'POR', 'ROM', 'SVK', 'SLO', 'ESP', 'SWE']
     const [selectedNationality, setSelectedNationality] = useState<string | undefined>(undefined);
     useEffect(() => {
         const fetchCountries = async () => {
@@ -33,10 +33,6 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
 
         fetchCountries();
     }, []);
-
-    const isEu = (countryCode: string) => {
-        return euCountries.includes(countryCode);
-    }
 
     const isEEA = (countryCode: string) => {
         return countryCode === 'ISL' || countryCode === 'LIE' || countryCode === 'NOR' || countryCode === 'SWZ';
@@ -115,8 +111,8 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
             {selectedNationality &&
                 !isEu(selectedNationality) &&
                 !isEEA(selectedNationality) &&
-                !(isEu(props.outCountry) &&
-                (props.inCountry === CountryCode.UK || props.inCountry === CountryCode.OTHER)) &&
+                !(isEu(props.inCountry) &&
+                (props.outCountry === CountryCode.UK || props.outCountry === CountryCode.OTHER)) &&
                 <div>
                     <h2>Are you staying in {props.countryName} temporarily?</h2>
                     <div>
@@ -167,8 +163,8 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
             {selectedNationality &&
                 !isEu(selectedNationality) &&
                 !isEEA(selectedNationality) &&
-                (isEu(props.outCountry) &&
-                (props.inCountry === CountryCode.UK || props.inCountry === CountryCode.OTHER)) &&
+                (isEu(props.inCountry) &&
+                (props.outCountry === CountryCode.UK || props.outCountry === CountryCode.OTHER)) &&
                 <div>
                     <label>Do you already have a visa to enter in {props.countryName}?</label>
                     <div>
