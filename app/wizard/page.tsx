@@ -82,8 +82,12 @@ export default function WizardPage() {
         let inCountryArr:string[] = [selectedInCountry!, 'ALL COUNTRIES'];
         if (isEu(selectedInCountry!))
             inCountryArr.push('ALL EU');
-        let outTitleArr:string[] = outTitle ? [outTitle] :[];
-        let inTitleArr:string[] = inTitle ? [inTitle] :[]
+        let outTitleArr:string[] = ['ALL OUT TITLE'];
+        let inTitleArr:string[] = ['ALL IN TITLE'];
+
+        if(outTitle) outTitleArr.push(outTitle)
+        if(inTitle) inTitleArr.push(inTitle)
+
         let timeArr:string[] = [selectedTime!, 'ALL DURATIONS'];
         let natArr:NatMig[] = [NatMig.AllNationalities];
         let emplArr:Empl[] = [Empl.ALL_EMPL];
@@ -193,11 +197,10 @@ export default function WizardPage() {
                             setNat(nationality)
                             setNotSupported(new Map(notSupported).set(2, [false, false, false]))
                         }}
-                        onSubquestionSelect={(inTitle: any, outTitle: any) => {
+                        onSubquestionSelect={(inTitle, outTitle) => {
                             setInTitle(inTitle);
                             setOutTitle(outTitle);
-                            console.log(inTitle, outTitle);
-                            var tmpSupported = (inTitle === undefined || outTitle === undefined)
+                            const tmpSupported = (inTitle === undefined || outTitle === undefined);
                             setNotSupported(new Map(notSupported).set(3, [tmpSupported, tmpSupported, tmpSupported]))
                         }}
                         countryName={supportedCountries[selectedInCountry!]}

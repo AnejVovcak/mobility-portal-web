@@ -50,10 +50,10 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
     }
 
     const onSelectSchengenVisa = () => {
-        if (props.inCountry === (CountryCode.ROM || CountryCode.BEL || CountryCode.ITA || CountryCode.SLO) &&
+        if ([CountryCode.ROM, CountryCode.BEL, CountryCode.ITA, CountryCode.SLO].includes(props.inCountry) &&
             props.time === MigTime.LessThan90Days) {
             props.onSubquestionSelect(InTitleEnum.SchengenVisa, OutTitleEnum.SchengenVisa);
-        } else if (props.inCountry === (CountryCode.ROM || CountryCode.BEL || CountryCode.ITA || CountryCode.SLO) &&
+        } else if ([CountryCode.ROM, CountryCode.BEL, CountryCode.ITA, CountryCode.SLO].includes(props.inCountry) &&
             props.time === MigTime.MoreThan90Days) {
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.SchengenVisa);
         } else if (props.inCountry === CountryCode.POR &&
@@ -71,7 +71,7 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
     }
 
     const onSelectResearcherPermit = () => {
-        if (props.inCountry === (CountryCode.ROM || CountryCode.BEL || CountryCode.ITA || CountryCode.SLO)) {
+        if ([CountryCode.ROM, CountryCode.BEL, CountryCode.ITA, CountryCode.SLO].includes(props.inCountry)) {
             props.onSubquestionSelect(InTitleEnum.AllInTitle, OutTitleEnum.AllOutTitle);
         } else if (props.inCountry === CountryCode.POR) {
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.ResearcherPermit);
@@ -81,10 +81,10 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
     }
 
     const onSelectNoNeed = () => {
-        if (props.inCountry === (CountryCode.ROM || CountryCode.BEL || CountryCode.ITA || CountryCode.SLO) &&
+        if ([CountryCode.ROM, CountryCode.BEL, CountryCode.ITA, CountryCode.SLO].includes(props.inCountry) &&
             props.time === MigTime.LessThan90Days) {
             props.onSubquestionSelect(InTitleEnum.SchengenVisa, OutTitleEnum.NoSchengenVisa);
-        } else if (props.inCountry === (CountryCode.ROM || CountryCode.BEL || CountryCode.ITA || CountryCode.SLO) &&
+        } else if ([CountryCode.ROM, CountryCode.BEL, CountryCode.ITA, CountryCode.SLO].includes(props.inCountry) &&
             props.time === MigTime.MoreThan90Days) {
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.NoSchengenVisa);
         } else if (props.inCountry === CountryCode.POR &&
