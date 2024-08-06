@@ -3,3 +3,7 @@ export const euCountries = ['AUT', 'BEL', 'BGR', 'HRV', 'CYP', 'CZE', 'DNK', 'ES
 export const isEu = (countryCode: string) => {
 	return euCountries.includes(countryCode);
 }
+
+export const isEEA = (countryCode: string) => {
+	return countryCode === 'ISL' || countryCode === 'LIE' || countryCode === 'NOR' || countryCode === 'SWZ';
+}

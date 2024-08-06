@@ -5,7 +5,7 @@ import {InTitleEnum} from "@/app/lib/definitions/InTitleEnum";
 import {OutTitleEnum} from "@/app/lib/definitions/OutTitleEnum";
 import {MigTime} from "@/app/lib/definitions/time";
 import {SecondmentEnum} from "@/app/lib/definitions/SecondmentEnum";
-import {isEu} from "@/app/lib/utils/isEu";
+import {isEEA, isEu} from "@/app/lib/utils/isEu";
 
 interface WhatIsYourNationalityProps {
     inCountry: CountryCode;
@@ -33,10 +33,6 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
 
         fetchCountries();
     }, []);
-
-    const isEEA = (countryCode: string) => {
-        return countryCode === 'ISL' || countryCode === 'LIE' || countryCode === 'NOR' || countryCode === 'SWZ';
-    }
 
     const onSelectNationality = (countryCode: string) => {
         const eu = isEu(countryCode);
