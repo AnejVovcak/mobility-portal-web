@@ -139,13 +139,6 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
                     <div>
                         <input type="radio"
                                name="visa"
-                               value="temporary"
-                               onClick={() => props.onSubquestionSelect(undefined, undefined)}/>
-                        <label>Yes, based on my temporary permit</label>
-                    </div>
-                    <div>
-                        <input type="radio"
-                               name="visa"
                                value="other"
                                onClick={() => props.onSubquestionSelect(undefined, undefined)}/>
                         <label>Yes, based on my other temporary permit</label>
