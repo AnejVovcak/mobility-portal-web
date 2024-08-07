@@ -56,7 +56,7 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.SchengenVisa);
         } else if (props.inCountry === CountryCode.POR &&
             props.time === MigTime.MoreThanAYear) {
-            props.onSubquestionSelect(InTitleEnum.ResearcherPermitWithResidenceVisa, OutTitleEnum.SchengenVisa);
+            props.onSubquestionSelect(InTitleEnum.ResearcherPermitButWithResidencePermit, OutTitleEnum.SchengenVisa);
         } else if (props.inCountry === CountryCode.UK) {
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.AllOutTitle);
         }
@@ -87,7 +87,7 @@ export default function WhatIsYourNationality(props: WhatIsYourNationalityProps)
             props.onSubquestionSelect(InTitleEnum.ResearcherPermit, OutTitleEnum.NoSchengenVisa);
         } else if (props.inCountry === CountryCode.POR &&
             props.time === MigTime.MoreThanAYear) {
-            props.onSubquestionSelect(InTitleEnum.ResearcherPermitWithResidenceVisa, OutTitleEnum.NoSchengenVisa);
+            props.onSubquestionSelect(InTitleEnum.ResearcherPermitButWithResidencePermit, OutTitleEnum.NoSchengenVisa);
         }
     }
 
