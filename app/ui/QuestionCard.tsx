@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import {Button} from "@/app/ui/button";
 
 interface QuestionCardProps {
   childComponent?: React.ReactNode;
@@ -18,11 +19,11 @@ export default function QuestionCard(props: QuestionCardProps) {
       {props.childComponent}
       
       <div className="button-group">
-          {!props.isFirst && <button className="button" onClick={props.onBack}>Back</button>}
+          {!props.isFirst && <Button onClick={props.onBack}>Back</Button>}
           {props.isLast ? (
-            <button className="button" onClick={props.onSubmit}>Submit</button>
+            <Button onClick={props.onSubmit}>Submit</Button>
           ) : (
-            <button className="button ml-auto" onClick={props.onNext}>Next</button>
+            <Button className="button ml-auto" onClick={props.onNext}>Next</Button>
           )}
       </div>
     </div>

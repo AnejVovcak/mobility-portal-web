@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import {MontserratExtraBold} from "@/app/fonts";
+import {MontserratMedium} from "@/app/fonts";
 export const metadata: Metadata = {
   title: "Mobility Portal",
   description: "",
@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={MontserratExtraBold.className}>{children}</body>
+      <body className={MontserratMedium.className}>{children}</body>
     </html>
   );
 }

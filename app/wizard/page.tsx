@@ -329,7 +329,7 @@ export default function WizardPage() {
             )}
 
             {showAnswers && (
-                <div>
+                <div className="p-12">
                     {(
                         <div>
                             <h1 className="text-red-600 font-bold">Filters:</h1>
