@@ -1,6 +1,6 @@
 export const Logo = () => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" id="a" viewBox={"0 0 590 172"} width={"246"} height={"124"}>
+        <svg xmlns="http://www.w3.org/2000/svg" id="a" viewBox={"0 0 590 172"} width={"150"} height={"70"}>
             <defs>
                 <style>
                     {`.b{fill:#b2c1d1;}.c{fill:#22457d;}`}
