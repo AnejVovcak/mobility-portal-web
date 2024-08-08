@@ -312,7 +312,7 @@ export default function WizardPage() {
     return (
         <div>
             {!showAnswers && (
-                <div className="question-card-container">
+                <div className="flex flex-col items-center justify-center pt-40">
                     {Array.from({length: numOfQuestions}, (_, i) => (
                         <QuestionCard
                             key={i}

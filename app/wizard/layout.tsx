@@ -1,7 +1,11 @@
+import {NavBar} from "@/app/ui/NavBar";
+import React from "react";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <div className="flex-grow md:overflow-y-auto">{children}</div>
+        <div className="h-svh">
+            <NavBar/>
+            {children}
         </div>
     );
 }

@@ -15,15 +15,17 @@ interface QuestionCardProps {
 
 export default function QuestionCard(props: QuestionCardProps) {
   return (
-    <div className={`question-card ${props.visible ? 'block' : 'hidden'}`}>
+    <div className={`p-4 bg-white rounded shadow-md w-[450px] h-80 flex flex-col justify-between
+    ${props.visible ? 'block' : 'hidden'}`}>
+
       {props.childComponent}
       
-      <div className="button-group">
+      <div className="flex justify-between mt-4">
           {!props.isFirst && <Button onClick={props.onBack}>Back</Button>}
           {props.isLast ? (
             <Button onClick={props.onSubmit}>Submit</Button>
           ) : (
-            <Button className="button ml-auto" onClick={props.onNext}>Next</Button>
+            <Button className="ml-auto" onClick={props.onNext}>Next</Button>
           )}
       </div>
     </div>
