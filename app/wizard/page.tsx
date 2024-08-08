@@ -20,6 +20,7 @@ import {InTitleEnum} from '../lib/definitions/InTitleEnum';
 import {OutTitleEnum} from '../lib/definitions/OutTitleEnum';
 import {isEEA, isEu} from '../lib/utils/isEu';
 import {NatMig} from "@/app/lib/definitions/nationality";
+import {ProgressBar} from "@/app/ui/ProgressBar";
 
 export default function WizardPage() {
     const numOfQuestions = 8;
@@ -313,6 +314,7 @@ export default function WizardPage() {
         <div>
             {!showAnswers && (
                 <div className="flex flex-col items-center justify-center pt-40">
+                    <ProgressBar percentage={(index + 1) / numOfQuestions * 100}/>
                     {Array.from({length: numOfQuestions}, (_, i) => (
                         <QuestionCard
                             key={i}
