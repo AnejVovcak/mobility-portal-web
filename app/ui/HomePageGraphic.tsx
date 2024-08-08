@@ -8,10 +8,10 @@ export const HomePageGraphic = () => {
                 </style>
                 <linearGradient id="b" x1="192.24" y1="714.24" x2="970.36" y2="714.24"
                                 gradientTransform="matrix(1, 0, 0, 1, 0, 0)" gradientUnits="userSpaceOnUse">
-                    <stop offset="0" stop-color="#fff"/>
-                    <stop offset=".27" stop-color="#eaeef3"/>
-                    <stop offset=".7" stop-color="#c4cedc"/>
-                    <stop offset="1" stop-color="#8a9bb5"/>
+                    <stop offset="0" stopColor="#fff"/>
+                    <stop offset=".27" stopColor="#eaeef3"/>
+                    <stop offset=".7" stopColor="#c4cedc"/>
+                    <stop offset="1" stopColor="#8a9bb5"/>
                 </linearGradient>
             </defs>
             <g id="a">

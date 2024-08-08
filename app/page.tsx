@@ -6,7 +6,7 @@ import ClientButton from "@/app/ui/ClientButton";
 export default async function Home() {
 
     return (
-        <main className="flex min-h-screen flex-col">
+        <main className="flex h-svh flex-col">
             <NavBar/>
             <div className={"grid grid-cols-2 items-center gap-44 grid-flow-row px-64"}>
                 <div className={`flex flex-col gap-7`}>
@@ -22,7 +22,7 @@ export default async function Home() {
                         <ClientButton href={"wizard"} text={"Get started"}/>
                     </div>
                 </div>
-                <div className={`flex justify-center items-center w-[550px] h-[700px]`}>
+                <div className={`flex justify-center items-center w-[550px] h-[650px]`}>
                     <HomePageGraphic/>
                 </div>
             </div>

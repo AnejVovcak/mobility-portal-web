@@ -71,3 +71,11 @@
   border: 1px solid #ccc; /* Add border or other styling as needed */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
 }
+
+.primary{
+    @apply bg-blue text-white;
+}
+
+.secondary{
+    @apply bg-white text-blue;
+}

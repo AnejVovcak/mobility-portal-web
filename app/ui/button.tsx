@@ -5,11 +5,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Button({ children, className, ...rest }: ButtonProps) {
+
     return (
         <button
             {...rest}
             className={clsx(
-                'flex h-12 items-center rounded-lg bg-blue px-8 text-sm text-white',
+                'flex h-12 items-center rounded-lg px-8 text-sm font-bold',
                 className,
             )}
         >

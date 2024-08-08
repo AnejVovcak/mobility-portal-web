@@ -14,7 +14,7 @@ export default function ClientButton({ href, text }: ClientButtonProps) {
     };
 
     return (
-        <Button onClick={handleClick}>
+        <Button className="primary" onClick={handleClick}>
             {text}
         </Button>
     );
