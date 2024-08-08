@@ -79,3 +79,7 @@
 .secondary{
     @apply bg-white text-blue;
 }
+
+.question-text{
+    @apply text-3xl text-blue pb-5;
+}

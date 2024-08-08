@@ -12,6 +12,12 @@ export const MontserratExtraBold = Montserrat({
     weight: '800',
 });
 
+export const QuestionFont = Montserrat({
+    subsets: ['latin'],
+    display: 'swap',
+    weight: '800',
+});
+
 export const MontserratMedium = Montserrat({
     subsets: ['latin'],
     display: 'swap',

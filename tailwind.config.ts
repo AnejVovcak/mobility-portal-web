@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     colors: {
       'white': '#FFFFFF',
+      'card-background': '#F6F6F6',
       'light-gray': '#70707052',
       'gray': '#00000029',
       'blue': '#22457D',

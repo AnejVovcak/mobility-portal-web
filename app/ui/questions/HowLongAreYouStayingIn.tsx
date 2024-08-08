@@ -2,6 +2,7 @@
 
 import {CountryCode} from "@/app/lib/definitions/countries";
 import {MigTime} from "@/app/lib/definitions/time";
+import {MontserratExtraBold, QuestionFont} from "@/app/fonts";
 
 interface HowLongAreYouStayingInProps {
     countryName: string;
@@ -12,7 +13,9 @@ interface HowLongAreYouStayingInProps {
 export default function HowLongAreYouStayingIn(props: HowLongAreYouStayingInProps) {
     return (
         <div>
-            <h2>How long are you staying in {props.countryName}?</h2>
+            <div className={`${QuestionFont.className} question-text`}>
+                How long are you staying in {props.countryName}?
+            </div>
 
             <form>
                 {([CountryCode.ROM, CountryCode.SLO, CountryCode.BEL, CountryCode.ITA] as CountryCode[]).includes(props.country) ? (
