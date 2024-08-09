@@ -83,3 +83,15 @@
 .question-text{
     @apply text-3xl text-blue pb-5;
 }
+
+h3 {
+    @apply text-2xl text-dark-gray;
+}
+
+h2 {
+    @apply text-3xl text-black;
+}
+
+h1 {
+    @apply text-4xl text-gray;
+}

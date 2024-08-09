@@ -21,6 +21,7 @@ import {OutTitleEnum} from '../lib/definitions/OutTitleEnum';
 import {isEEA, isEu} from '../lib/utils/isEu';
 import {NatMig} from "@/app/lib/definitions/nationality";
 import {ProgressBar} from "@/app/ui/ProgressBar";
+import FinalResult from '../ui/FinalResult';
 
 export default function WizardPage() {
     const numOfQuestions = 8;
@@ -332,43 +333,31 @@ export default function WizardPage() {
 
             {showAnswers && (
                 <div className="p-12">
-                    {(
+                    {/* {(
                         <div>
                             <h1 className="text-red-600 font-bold">Filters:</h1>
                             <pre>{JSON.stringify(generateBody(), null, 2)}</pre>
                         </div>
-                    )}
+                    )} */}
 
                     <div>
-                        <h1 className="text-red-600 font-bold">Migration:</h1>
-                        {contentMig.length > 0 && !notSupportedGlobal()[0] && (contentMig.map((item, index) => (
-                            <div key={index} dangerouslySetInnerHTML={{__html: item.content}}/>
-                        )))}
-                        {contentMig.length > 0 && notSupportedGlobal()[0] &&
-                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this
-                                situation yet</h1>
+                        <h1 className="text-red font-bold">Migration:</h1>
+                        {
+                            <FinalResult content={contentMig} isSuported={!notSupportedGlobal()[0]} platform_title_name="platform_title_mig" />
                         }
                     </div>
 
                     <div>
-                        <h1 className="text-red-600 font-bold">Social Security:</h1>
-                        {contentSocSec.length > 0 && !notSupportedGlobal()[1] && (contentSocSec.map((item, index) => (
-                            <div key={index} dangerouslySetInnerHTML={{__html: item.content}}/>
-                        )))}
-                        {contentSocSec.length > 0 && notSupportedGlobal()[1] &&
-                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this
-                                situation yet</h1>
+                        <h1 className="text-red font-bold">Social Security:</h1>
+                        {
+                            <FinalResult content={contentSocSec} isSuported={!notSupportedGlobal()[1]} platform_title_name="platform_title_socSec" />
                         }
                     </div>
 
                     <div>
-                        <h1 className="text-red-600 font-bold">Tax:</h1>
-                        {contentTax.length > 0 && !notSupportedGlobal()[2] && (contentTax.map((item, index) => (
-                            <div key={index} dangerouslySetInnerHTML={{__html: item.content}}/>
-                        )))}
-                        {contentTax.length > 0 && notSupportedGlobal()[2] &&
-                            <h1 className="text-red-600 font-bold">We are sorry, this version does not cover this
-                                situation yet</h1>
+                        <h1 className="text-red font-bold">Tax:</h1>
+                        {
+                            <FinalResult content={contentTax} isSuported={!notSupportedGlobal()[2]} platform_title_name="platform_title_tax" />
                         }
                     </div>
                 </div>
